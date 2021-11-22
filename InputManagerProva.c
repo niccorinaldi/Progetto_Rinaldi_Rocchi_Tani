@@ -62,7 +62,7 @@ int main(int argc, char *argv[]){
   close(fdFile); //chiusura file
   unlink(SocketP2); //forse, vedi
   printf("Finito :) \n");
-  return 0;*/
+  return 0;
 }
 
 //metodo per la creazione di P1 --> pipe
@@ -70,7 +70,7 @@ int connessionePipe(){
   int fdPipe=0;
 
   while(fdPipe != -1){
-    fdPipe = open("NomeFIle", O_WRONLY) //apertura pipe in sola scrittura
+    fdPipe = open("NomeFIle", O_WRONLY); //apertura pipe in sola scrittura
     if(fdPipe == -1){
       printf("Errore apetura pipe");
       fdPipe = 0;
@@ -112,7 +112,7 @@ int fileCondiviso(){
   int fdFile = 0;
 
   while(fdFile != -1){
-    fdFile = open("NomeFIle", O_CREAT|O_WRONLY|O_TRUNC, 0777) //creazione file condiviso create-> creare | O_WRONLY-> sola scrittura | O_TRUNC-> se il file esiste gia lo tronca a zero
+    fdFile = open("NomeFIle", O_CREAT|O_WRONLY|O_TRUNC, 0777); //creazione file condiviso create-> creare | O_WRONLY-> sola scrittura | O_TRUNC-> se il file esiste gia lo tronca a zero
     if(fdFile == -1){
       printf("Errore apetura pipe");
       fdFile=0;
