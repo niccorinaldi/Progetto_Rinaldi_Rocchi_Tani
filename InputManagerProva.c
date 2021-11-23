@@ -1,7 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <fcntl.h>
 #include <sys/socket.h>
-#include <sys/un.h> /* For AF_UNIX sockets */
-
+#include <sys/un.h>
 int main(int argc, char *argv[]){
 
   //Apertura file dataset.csv in sola lettura
