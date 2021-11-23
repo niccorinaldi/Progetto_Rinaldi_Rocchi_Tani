@@ -55,12 +55,12 @@ int main(int argc, char *argv[]){
   }
 
   //chiudere tutto (fclose)
-  close(clientFd); //chiusura client
-  close(socketFd); //chiusura socket
-  //fclose(fileponter);
-  close(fdPipe); //chiusura pipe
-  close(fdFile); //chiusura file
-  unlink(SocketP2); //forse, vedi
+  close(fdConnessionePipe); //chiusura client
+  close(fdConnessioneSocket); //chiusura socket
+  close(fileponter);
+//  close(fdPipe); //chiusura pipe
+//  close(fdFile); //chiusura file
+//  unlink(SocketP2); //forse, vedi
   printf("Finito :) \n");
   return 0;
 }
@@ -84,7 +84,7 @@ int connessionePipe(){
 }
 
 //metodo per comunicare con P2 tramite socket
-int socketConnection() {
+/*int socketConnection() {
 
   int socketFd, clientFd, serverLen;
   struct sockaddr_un serverUNIXAddress;
@@ -95,17 +95,17 @@ int socketConnection() {
   clientSockAddrPtr = (struct sockaddr*) &clientUNIXAddress;
   clientLen = sizeof (clientUNIXAddress);
 
-  socketFd = socket (AF_UNIX, SOCK_STREAM, DEFAULT_PROTOCOL); /* istanzia la socket */ //metti anche 0 invece di "DEFAULT_PROTOCOL"  //file descriptor (descrittore di file associato al nuovo socket creato)
+  socketFd = socket (AF_UNIX, SOCK_STREAM, DEFAULT_PROTOCOL); // istanzia la socket  //metti anche 0 invece di "DEFAULT_PROTOCOL"  //file descriptor (descrittore di file associato al nuovo socket creato)
   serverUNIXAddress.sun_family = AF_UNIX; // dominio del server (client e server sono sulla stessa macchina -> rel.)
   strcpy (serverUNIXAddress.sun_path, SocketP2);
   unlink (SocketP2); //invochiamo un unlink() del nome "SocketP2" perché potrebbe già esistere un sockey avente lo stesso nome (causando errore)
-  bind(socketFd, serverSockAddrPtr, serverLen); /* definisce il nome della socket */ //VEDI BENE
-  listen(socketFd, 1); /* ascolta la coda delle connessioni */ //In questo modo gli dico che il numero massimo di richieste pendenti è 1
+  bind(socketFd, serverSockAddrPtr, serverLen); // definisce il nome della socket //VEDI BENE
+  listen(socketFd, 1);  //ascolta la coda delle connessioni  //In questo modo gli dico che il numero massimo di richieste pendenti è 1
 
-  clientFd = accept(socketFd, clientSockAddrPtr, &clientLen); /* gestisce la prossima connessione */ //clientFd = nuovo descrittore di file
+  clientFd = accept(socketFd, clientSockAddrPtr, &clientLen);  gestisce la prossima connessione  //clientFd = nuovo descrittore di file
   //sfd == Socket File Descriptor
   return clientFd;
-}
+}*/
 
 //metodo per la creazione di P3
 int fileCondiviso(){
