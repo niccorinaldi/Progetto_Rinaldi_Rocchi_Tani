@@ -1,72 +1,11 @@
-#include <stdio.h>
+#include <stdio.h> // controllare le librerie che servono
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <fcntl.h>
 #include <sys/socket.h>
 #include <sys/un.h>
-int main(int argc, char *argv[]){
-
-  //Apertura file dataset.csv in sola lettura
-  FILE *filePointer = fopen(argv[1], "r"); // ???
-  if(filePointer == NULL){  //controllo che il file si sia aperto correttamente
-    perror("Errore apertura file");  //si può usare anche printf
-    exit(1);   // sleep(1); //segnala l'interruzione anomala del programma (EXIT_FAILURE)
-  }
-
-  char carattereCorrente;
-  int numChar=0;
-
-  /* Settaggio della modalità */
-  char MODE[15]; //crea un array di 15 con nome MODE
-  strcpy(MODE, argv[0]); //copia l'elemento in pos. 0 di argv e lo mette in MODE
-  if(strcmp(MODE,"NORMALE")==0 || strcmp(MODE,"FALLIMENTO")==0){  //strcmp confronta due stringhe (restituisce 0 se sono uguali): MODE con NORMALE e MODE con FALLIMENTO
-      printf("MODALITA': %s\n", MODE);
-  }else{
-      printf("Inserire una modalità valida: FALLIMENTO o NORMALE\n");
-      kill(0,SIGKILL); //invia il segnale SIGKILL(terminazione immediata del processo) a ogni process group del processo
-  }
-
-  //Scartare la prima riga
-  while(carattereCorrente != "\n"){
-    carattereCorrente = fgetc(filePointer); //fgetc scorre un carattere alla volta
-  }
-
-  //Trovare la dimensione del Buffer(dimRiga)
-  while(carattereCorrente != "\n"){
-    carattereCorrente = fgetc(filePointer);
-    numChar++;
-  }
-
-  fseek(filePointer, -numChar, 1); // Riposizionamento all'inizio della seconda riga
-  char buffer[numChar]; //tutte le righe dovrebbero essere uguali
-
-  //Scorrerre tutto il file inviando le righe ai processi con tempo 1 secondo
-
-  /* Connessione alla pipe di P1*/
-  int fdConnessionePipe = connessionePipe();
-  /* Connessione alla socket di P2*/
-  int fdConnessioneSocket = socketConnection();
-  /*Connessione al file condiviso di P3*/
-  int fdFileCondiviso = fileCondiviso();
-
-  while(fgets(buffer, numChar, filePointer)){
-    write(fdConnessionePipe, buffer, numChar);
-    write (fdConnessioneSocket, buffer, numChar); //sendToSocket
-    write(fdFileCondiviso, buffer, numChar);
-    sleep(1);
-  }
-
-  //chiudere tutto (fclose)
-  close(fdConnessionePipe); //chiusura client
-  close(fdConnessioneSocket); //chiusura socket
-  close(fileponter);
-//  close(fdPipe); //chiusura pipe
-//  close(fdFile); //chiusura file
-//  unlink(SocketP2); //forse, vedi
-  printf("Finito :) \n");
-  return 0;
-}
+#include <signal.h>
 
 //metodo per la creazione di P1 --> pipe
 int connessionePipe(){
@@ -126,4 +65,65 @@ int fileCondiviso(){
     }
   }
   return fdFile;
+}
+
+int main(int argc, char *argv[]){
+
+  //Apertura file dataset.csv in sola lettura
+  FILE *filePointer = fopen(argv[1], "r"); // ???
+  if(filePointer == NULL){  //controllo che il file si sia aperto correttamente
+    perror("Errore apertura file");  //si può usare anche printf
+    exit(1);   // sleep(1); //segnala l'interruzione anomala del programma (EXIT_FAILURE)
+  }
+
+  char carattereCorrente;
+  int numChar=0;
+
+  /* Settaggio della modalità */
+  char MODE[15]; //crea un array di 15 con nome MODE
+  strcpy(MODE, argv[0]); //copia l'elemento in pos. 0 di argv e lo mette in MODE
+  if(strcmp(MODE,"NORMALE")==0 || strcmp(MODE,"FALLIMENTO")==0){  //strcmp confronta due stringhe (restituisce 0 se sono uguali): MODE con NORMALE e MODE con FALLIMENTO
+      printf("MODALITA': %s\n", MODE);
+  }else{
+      printf("Inserire una modalità valida: FALLIMENTO o NORMALE\n");
+      kill(0,SIGKILL); //invia il segnale SIGKILL(terminazione immediata del processo) a ogni process group del processo
+  }
+
+  //Scartare la prima riga
+  while(carattereCorrente != '\n'){
+    carattereCorrente = fgetc(filePointer); //fgetc scorre un carattere alla volta
+  }
+
+  //Trovare la dimensione del Buffer(dimRiga)
+  while(carattereCorrente != '\n'){
+    carattereCorrente = fgetc(filePointer);
+    numChar++;
+  }
+
+  fseek(filePointer, -numChar, 1); // Riposizionamento all'inizio della seconda riga
+  char buffer[numChar]; //tutte le righe dovrebbero essere uguali
+
+  //Scorrerre tutto il file inviando le righe ai processi con tempo 1 secondo
+
+  /* Connessione alla pipe di P1*/
+  int fdConnessionePipe = connessionePipe();
+  /* Connessione alla socket di P2*/
+  int fdConnessioneSocket = socketConnection();
+  /*Connessione al file condiviso di P3*/
+  int fdFileCondiviso = fileCondiviso();
+
+  while(fgets(buffer, numChar, filePointer)){
+    write(fdConnessionePipe, buffer, numChar);
+    write (fdConnessioneSocket, buffer, numChar); //sendToSocket
+    write(fdFileCondiviso, buffer, numChar);
+    sleep(1);
+  }
+
+  //chiudere tutto (fclose)
+  close(fdConnessionePipe); //chiusura client
+  close(fdConnessioneSocket); //chiusura socket
+  close(fdFileCondiviso);
+  close(filePointer);
+  printf("Finito :) \n");
+  return 0;
 }
