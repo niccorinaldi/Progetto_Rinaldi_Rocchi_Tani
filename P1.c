@@ -6,6 +6,7 @@
 #include <sys/stat.h> /*For S_IFIFO */
 #include <fcntl.h>
 #include <sys/types.h>
+#include <unistd.h>
 #include <sys/socket.h>
 #include <sys/un.h> /*For AF_UNIX sockets */
 
