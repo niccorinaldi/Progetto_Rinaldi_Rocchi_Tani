@@ -72,7 +72,7 @@ int fileCondiviso(){
 int main(int argc, char *argv[]){
 
   //Apertura file dataset.csv in sola lettura
-  FILE *filePointer = fopen(argv[0], "r"); // ???
+  FILE *filePointer = fopen(argv[2], "r"); // ???
   if(filePointer == NULL){  //controllo che il file si sia aperto correttamente
     perror("Errore apertura file");  //si può usare anche printf
     exit(1);   // sleep(1); //segnala l'interruzione anomala del programma (EXIT_FAILURE)
