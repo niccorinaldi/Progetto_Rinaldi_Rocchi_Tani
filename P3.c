@@ -1,6 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <time.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 
 int main(int argc, char *argv[]){
 
