@@ -10,6 +10,37 @@
 #include <sys/socket.h>
 #include <sys/un.h> /*For AF_UNIX sockets */
 
+int socketConnection() {
+    int fdConnessioneSocket, serverLen, result;
+    struct sockaddr_un serverUNIXAddress;
+    struct sockaddr* serverSockAddrPtr;
+    serverSockAddrPtr = (struct sockaddr*) &serverUNIXAddress;
+    serverLen = sizeof (serverUNIXAddress);
+    fdConnessioneSocket = socket (AF_UNIX, SOCK_STREAM, DEFAULT_PROTOCOL);
+    serverUNIXAddress.sun_family = AF_UNIX; /*dominio server*/
+    strcpy (serverUNIXAddress.sun_path, "DFsocket");/*nome server*/
+
+    do { /*itera finchè non viene stabilita la connessione*/
+        result = connect (fdConnessioneSocket, serverSockAddrPtr, serverLen);
+        if (result == -1) {
+	        printf("connection problem P1;re-try in 1 sec\n");
+	        sleep (1);
+        }
+    } while (result == -1);
+    return fdConnessioneSocket;
+}
+
+int random_failure(int result) {
+
+    /* Imposto un valore casuale al seed della funzione random utilizzando time */
+    srand(time(NULL)+10);
+
+    /* Genero un numero casuale tra 0 e 9, se uguale a 7 modifico result */
+    int rand = random()%10;
+    if(rand == 7)
+        result += 10;
+    return result;
+}
 void main (int argc, char* argv[]) {
 
     /* Definisco la lunghezza delle righe da leggere */
@@ -71,36 +102,4 @@ void main (int argc, char* argv[]) {
     close (fdPipe);
     close (fdConnessioneSocket);
     unlink("NomeFile");
-}
-
-int socketConnection() {
-    int fdConnessioneSocket, serverLen, result;
-    struct sockaddr_un serverUNIXAddress;
-    struct sockaddr* serverSockAddrPtr;
-    serverSockAddrPtr = (struct sockaddr*) &serverUNIXAddress;
-    serverLen = sizeof (serverUNIXAddress);
-    fdConnessioneSocket = socket (AF_UNIX, SOCK_STREAM, DEFAULT_PROTOCOL);
-    serverUNIXAddress.sun_family = AF_UNIX; /*dominio server*/
-    strcpy (serverUNIXAddress.sun_path, "DFsocket");/*nome server*/
-
-    do { /*itera finchè non viene stabilita la connessione*/
-        result = connect (fdConnessioneSocket, serverSockAddrPtr, serverLen);
-        if (result == -1) {
-	        printf("connection problem P1;re-try in 1 sec\n");
-	        sleep (1);
-        }
-    } while (result == -1);
-    return fdConnessioneSocket;
-}
-
-int random_failure(int result) {
-
-    /* Imposto un valore casuale al seed della funzione random utilizzando time */
-    srand(time(NULL)+10);
-
-    /* Genero un numero casuale tra 0 e 9, se uguale a 7 modifico result */
-    int rand = random()%10;
-    if(rand == 7)
-        result += 10;
-    return result;
 }
