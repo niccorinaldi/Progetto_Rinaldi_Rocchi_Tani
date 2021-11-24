@@ -72,7 +72,7 @@ int fileCondiviso(){
 int main(int argc, char *argv[]){
 
   //Apertura file dataset.csv in sola lettura
-  FILE *filePointer = fopen(argv[1], "r"); // ???
+  FILE *filePointer = fopen(argv[0], "r"); // ???
   if(filePointer == NULL){  //controllo che il file si sia aperto correttamente
     perror("Errore apertura file");  //si può usare anche printf
     exit(1);   // sleep(1); //segnala l'interruzione anomala del programma (EXIT_FAILURE)
@@ -83,7 +83,7 @@ int main(int argc, char *argv[]){
 
   /* Settaggio della modalità */
   char MODE[15]; //crea un array di 15 con nome MODE
-  strcpy(MODE, argv[0]); //copia l'elemento in pos. 0 di argv e lo mette in MODE
+  strcpy(MODE, argv[1]); //copia l'elemento in pos. 0 di argv e lo mette in MODE
   if(strcmp(MODE,"NORMALE")==0 || strcmp(MODE,"FALLIMENTO")==0){  //strcmp confronta due stringhe (restituisce 0 se sono uguali): MODE con NORMALE e MODE con FALLIMENTO
       printf("MODALITA': %s\n", MODE);
   }else{
