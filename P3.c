@@ -14,7 +14,7 @@ int socketConnection() {
     struct sockaddr* serverSockAddrPtr;
     serverSockAddrPtr = (struct sockaddr*) &serverUNIXAddress;
     serverLen = sizeof (serverUNIXAddress);
-    fdConnessioneSocket = socket (AF_UNIX, SOCK_STREAM, DEFAULT_PROTOCOL);
+    fdConnessioneSocket = socket (AF_UNIX, SOCK_STREAM, 0);
     serverUNIXAddress.sun_family = AF_UNIX; /*dominio server*/
     strcpy (serverUNIXAddress.sun_path, "DFsocket"); /*nome server*/
 
