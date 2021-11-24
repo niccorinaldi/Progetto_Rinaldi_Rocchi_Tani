@@ -16,7 +16,7 @@ int socketConnection() {
     struct sockaddr* serverSockAddrPtr;
     serverSockAddrPtr = (struct sockaddr*) &serverUNIXAddress;
     serverLen = sizeof (serverUNIXAddress);
-    fdConnessioneSocket = socket (AF_UNIX, SOCK_STREAM, DEFAULT_PROTOCOL);
+    fdConnessioneSocket = socket (AF_UNIX, SOCK_STREAM, 0);
     serverUNIXAddress.sun_family = AF_UNIX; /*dominio server*/
     strcpy (serverUNIXAddress.sun_path, "DFsocket");/*nome server*/
 
@@ -95,7 +95,7 @@ void main (int argc, char* argv[]) {
             result = random_failure(result);
 
         /* Invio del risultato a decisionFunction */
-        snprintf(bufferInvio,6,"%d\n",result);/* Salvataggio del risultato in un buffer di invio */
+        snprintf(*bufferInvio,6,"%d\n",result);/* Salvataggio del risultato in un buffer di invio */
         write(fdConnessioneSocket,bufferInvio,6);
         result = 0;
     }
