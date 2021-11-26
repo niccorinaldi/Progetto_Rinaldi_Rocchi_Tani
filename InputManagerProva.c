@@ -12,7 +12,7 @@ int connessionePipe(){
   int fdPipe=0;
 
   while(fdPipe != -1){
-    fdPipe = open("NomeFIle", O_WRONLY); //apertura pipe in sola scrittura
+    fdPipe = open("NomeFile", O_WRONLY); //apertura pipe in sola scrittura
     if(fdPipe == -1){
       printf("Errore apetura pipe");
       fdPipe = 0;
@@ -95,7 +95,9 @@ int main(int argc, char *argv[]){
   while(carattereCorrente != '\n'){
     carattereCorrente = fgetc(filePointer); //fgetc scorre un carattere alla volta
   }
-
+  
+  carattereCorrente++;  //da vedere se fare +1 o +2 perche non sappiamo se \n conta come uno o due caratteri
+  
   //Trovare la dimensione del Buffer(dimRiga)
   while(carattereCorrente != '\n'){
     carattereCorrente = fgetc(filePointer);
