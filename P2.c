@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <arpa/inet.h>
 #include <sys/socket.h>
 #include <sys/un.h> /* For AF_UNIX sockets */
 #include <unistd.h> //per usare read()
@@ -9,7 +12,7 @@ int InputManagerSocketConnection() {
   struct sockaddr* serverSockAddrPtr;
   serverSockAddrPtr = (struct sockaddr*) &serverUNIXAddress; //VEDI BENE
   serverLen = sizeof (serverUNIXAddress); //Vedi bene anche questo (tutte queste 4 righe insomma)
-  clientFd = socket (AF_UNIX, SOCK_STREAM, DEFAULT_PROTOCOL); //righe 13 e 14 differenziazione con IM
+  clientFd = socket (AF_UNIX, SOCK_STREAM, 0); //righe 13 e 14 differenziazione con IM
   serverUNIXAddress.sun_family = AF_UNIX; // dominio del server (client e server sono sulla stessa macchina -> rel.)
   strcpy (serverUNIXAddress.sun_path, "SocketP2"); //nome del server (Nel progetto di Fili è senza virgolette -> vedi)
   do{ //ciclo finché non riesco a stabilire una connessione con il server
@@ -31,9 +34,9 @@ int DecisionFunctionSocketConnection()
     struct sockaddr* serverSockAddrPtr;
     serverSockAddrPtr = (struct sockaddr*) &serverUNIXAddress;
     serverLen = sizeof (serverUNIXAddress);
-    clientFd = socket (AF_UNIX, SOCK_STREAM, DEFAULT_PROTOCOL);
+    clientFd = socket (AF_UNIX, SOCK_STREAM, 0);
     serverUNIXAddress.sun_family = AF_UNIX;
-    strcpy (serverUNIXAddress.sun_path, SOCKETDF);
+    strcpy (serverUNIXAddress.sun_path, "SOCKETDF");
     do {
         connection = connect (clientFd, serverSockAddrPtr, serverLen);
         if (connection == -1) {
@@ -55,22 +58,6 @@ int readLine (int fd, char *str) { //quindi scandisco tutti i caratteri, a quest
  return (n > 0); } /* Return false if end-of-input */
 
  int sum(char *str) {
-    int charSum = 0;
-    for(int i = strlen(str) - 2; i >= 0; i--) { // -2 perchè l'ultimo carattere è '\n'
-        charSum += str[i] * (str[i] != 44); // 44 = virgola, ignora la virgola
-    }
-    return charSum;
-
-    //sotto un'alternariva per il conteggio dei caratteri in ordine inverso 
-     read(clientFd, line, LINESIZE);
-        /*conteggio dei caratteri in ordine inverso*/
-        for (int i = LINESIZE-1; i > -1; i--) 
-        {
-            if(line[i] != ',') {
-                result += line[i];
-            }
-        }
-
 
     //mix 
     int sumResult = 0; //vedi se puoi non inizializzarlo
@@ -82,15 +69,15 @@ int readLine (int fd, char *str) { //quindi scandisco tutti i caratteri, a quest
 }
 
 //M
-int random_failure(int result) {
-    srand(time(NULL)+20);  /* Imposto un valore casuale al seed della funzione random utilizzando time */
+/*int random_failure(int result) {
+    srand(time(NULL)+20);  // Imposto un valore casuale al seed della funzione random utilizzando time 
 
-    /* Genero un numero casuale tra 0 e 9, se uguale a 7 modifico result */
+    // Genero un numero casuale tra 0 e 9, se uguale a 7 modifico result 
     int rand = random()%10;
     if(rand == 7)    
         result += 20;
     return result;
-}
+}*/
 
 //F
 int random_failure(int attivo) {
@@ -116,14 +103,14 @@ int main() {
     int clientDecisionFunction;
     char str[700]; // 700 perchè le righe sono circa 550 caratteri e sennò va fuori memoria e crasha
     int sumResult = 0;
-    savePidOnFile("P2", getpid());
+ //   savePidOnFile("P2", getpid());
 
     clientFd = InputManagerSocketConnection();
     printf("P2: READY\n");
     int count = 0;
     while(readLine(clientFd, str)) { // Legge finché trova qualcosa da leggere
         sumResult = sum(str);
-        sumResult += random_failure(MODEXEC);
+        sumResult += random_failure(0);
         clientDecisionFunction = DecisionFunctionSocketConnection();
         sendToDecisionFunction(clientDecisionFunction, sumResult);
         close(clientDecisionFunction);
