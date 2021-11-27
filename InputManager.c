@@ -68,6 +68,57 @@ int fileCondiviso(){
   }
   return fdFile;
 }
+void creaFork(char MODE[15], char numChar[4]) {
+    int pid;
+
+  /*  pid = fork();    //creazione di decisionFunction
+    if(pid < 0) {
+        fprintf(stderr, "Fork failed\n");
+        exit(-1);
+    } else if(pid == 0) {
+        execl(DF, NULL);
+    }*/
+
+    pid = fork();   /*Creazione P1*/
+    if(pid < 0) {
+        fprintf(stderr, "Fork fallita\n");
+        exit(-1);
+    } else if (pid == 0) {
+        execl(P1, MODE, numChar, NULL);
+    }
+
+    pid = fork();   /*Creazione di P2*/
+    if(pid<0) {
+        fprintf(stderr, "Fork fallita\n");
+        exit(-1);
+    } else if(pid == 0) {
+        execl(P2, MODE, numChar, NULL);
+    }
+
+    pid = fork();   /*Creazione di P3*/
+    if(pid < 0) {
+        fprintf(stderr, "Fork fallita\n");
+        exit(-1);
+    } else if(pid == 0) {
+        execl(P3, MODE, numChar, NULL);
+    }
+
+  /*  pid = fork();   //Creazione di failure manager
+    if(pid < 0) {
+        fprintf(stderr, "Fork failed\n");
+        exit(-1);
+    } else if(pid == 0) {
+        execl(FM, NULL);
+    }
+
+    pid = fork();   //Creazione di watchdog
+    if(pid < 0) {
+        fprintf(stderr, "Fork failed\n");
+        exit(-1);
+    } else if(pid == 0) {
+        execl(WD, NULL);
+    }*/
+}
 
 int main(int argc, char *argv[]){
 
@@ -95,9 +146,9 @@ int main(int argc, char *argv[]){
   while(carattereCorrente != '\n'){
     carattereCorrente = fgetc(filePointer); //fgetc scorre un carattere alla volta
   }
-  
+
   carattereCorrente++;  //da vedere se fare +1 o +2 perche non sappiamo se \n conta come uno o due caratteri
-  
+
   //Trovare la dimensione del Buffer(dimRiga)
   while(carattereCorrente != '\n'){
     carattereCorrente = fgetc(filePointer);
@@ -108,6 +159,12 @@ int main(int argc, char *argv[]){
   char buffer[numChar]; //tutte le righe dovrebbero essere uguali
 
   //Scorrerre tutto il file inviando le righe ai processi con tempo 1 secondo
+  /* Buffer per il passaggio di LINESIZE ai figli */
+  char buffNumChar[4];
+  snprintf(buffNumChar,4,"%d\n",numChar);
+
+  /* Creazione dei figli */
+  creaFork(MODE, buffNumChar);
 
   /* Connessione alla pipe di P1*/
   int fdConnessionePipe = connessionePipe();
