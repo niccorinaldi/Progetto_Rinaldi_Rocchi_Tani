@@ -8,7 +8,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
-int socketConnection() {
+int connessioneSocket() {
     int fdConnessioneSocket, serverLen, result;
     struct sockaddr_un serverUNIXAddress;
     struct sockaddr* serverSockAddrPtr;
@@ -76,7 +76,7 @@ int main(int argc, char *argv[]){
   strcpy(bufferPrecedente, buffer);
 
   /* Connessione a decisionFunction */
-  int fdConnessioneSocket = socketConnection();
+  int fdConnessioneSocket = connessioneSocket();
 
   /* Creazione del buffer di invio */
   char bufferInvio[6]; //perchè 6?

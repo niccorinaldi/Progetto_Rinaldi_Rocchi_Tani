@@ -26,7 +26,7 @@ int connessionePipe(){
 }
 
 //metodo per comunicare con P2 tramite socket
-int socketConnection() {
+int connessioneSocket() {
 
   int socketFd, clientFd, serverLen, clientLen;
   struct sockaddr_un serverUNIXAddress;
@@ -79,6 +79,11 @@ void creaFork(char MODE[15], char numChar[4]) {
         execl(DF, NULL);
     }*/
 
+    /*fork trasforma un singolo processo in due processi identici, riconoscibili come processo padre e processo figlio.
+  In caso di successo, ritorna 0 al processo figlio ed il process ID del processo figlio al processo padre;
+  in caso di esito negativo, ritorna -1 al processo padre, settando errno per indicare l'errore verificatosi,
+  e non viene creato nessun processo figlio.*/
+
     pid = fork();   /*Creazione P1*/
     if(pid < 0) {
         fprintf(stderr, "Fork fallita\n");
@@ -123,7 +128,7 @@ void creaFork(char MODE[15], char numChar[4]) {
 int main(int argc, char *argv[]){
 
   //Apertura file dataset.csv in sola lettura
-  FILE *filePointer = fopen(argv[2], "r"); // ???
+  FILE *filePointer = fopen(argv[2], "r");
   if(filePointer == NULL){  //controllo che il file si sia aperto correttamente
     perror("Errore apertura file");  //si può usare anche printf
     exit(1);   // sleep(1); //segnala l'interruzione anomala del programma (EXIT_FAILURE)
@@ -134,7 +139,7 @@ int main(int argc, char *argv[]){
 
   /* Settaggio della modalità */
   char MODE[15]; //crea un array di 15 con nome MODE
-  strcpy(MODE, argv[1]); //copia l'elemento in pos. 0 di argv e lo mette in MODE
+  strcpy(MODE, argv[1]); //copia l'elemento in pos. 1 di argv e lo mette in MODE
   if(strcmp(MODE,"NORMALE")==0 || strcmp(MODE,"FALLIMENTO")==0){  //strcmp confronta due stringhe (restituisce 0 se sono uguali): MODE con NORMALE e MODE con FALLIMENTO
       printf("MODALITA': %s\n", MODE);
   }else{
@@ -159,8 +164,8 @@ int main(int argc, char *argv[]){
   char buffer[numChar]; //tutte le righe dovrebbero essere uguali
 
   //Scorrerre tutto il file inviando le righe ai processi con tempo 1 secondo
-  /* Buffer per il passaggio di LINESIZE ai figli */
-  char buffNumChar[4];
+  /* Buffer per il passaggio di numChar ai figli */
+  char buffNumChar[4]; //perchè 4??
   snprintf(buffNumChar,4,"%d\n",numChar);
 
   /* Creazione dei figli */
@@ -169,7 +174,7 @@ int main(int argc, char *argv[]){
   /* Connessione alla pipe di P1*/
   int fdConnessionePipe = connessionePipe();
   /* Connessione alla socket di P2*/
-  int fdConnessioneSocket = socketConnection();
+  int fdConnessioneSocket = connessioneSocket();
   /*Connessione al file condiviso di P3*/
   int fdFileCondiviso = fileCondiviso();
 

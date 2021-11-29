@@ -10,7 +10,7 @@
 #include <sys/socket.h>
 #include <sys/un.h> /*For AF_UNIX sockets */
 
-int socketConnection() {
+int connessioneSocket() {
     int fdConnessioneSocket, serverLen, result;
     struct sockaddr_un serverUNIXAddress;
     struct sockaddr* serverSockAddrPtr;
@@ -69,7 +69,7 @@ void main (int argc, char* argv[]) {
     fdPipe = open ("NomeFile", O_RDONLY);
 
     /* Connessione a decisionFunction */
-    int fdConnessioneSocket = socketConnection();
+    int fdConnessioneSocket = connessioneSocket();
 
     /* Creazione del buffer di invio */
     char* bufferInvio[6];

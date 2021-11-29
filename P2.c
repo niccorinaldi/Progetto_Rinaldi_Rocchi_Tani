@@ -16,8 +16,8 @@ int InputManagerSocketConnection() {
   serverUNIXAddress.sun_family = AF_UNIX; // dominio del server (client e server sono sulla stessa macchina -> rel.)
   strcpy (serverUNIXAddress.sun_path, "SocketP2"); //nome del server (Nel progetto di Fili è senza virgolette -> vedi)
   do{ //ciclo finché non riesco a stabilire una connessione con il server
-      connection = connect (clientFd, serverSockAddrPtr, serverLen); //restituisce 0 in caso di successo, -1 altrimenti 
-      if(connection == -1){ 
+      connection = connect (clientFd, serverSockAddrPtr, serverLen); //restituisce 0 in caso di successo, -1 altrimenti
+      if(connection == -1){
           printf("P2->InputManager: Retrying connection in 1 sec\n");
           sleep(1);
       }
@@ -59,7 +59,7 @@ int readLine (int fd, char *str) { //quindi scandisco tutti i caratteri, a quest
 
  int sum(char *str) {
 
-    //mix 
+    //mix
     int sumResult = 0; //vedi se puoi non inizializzarlo
     for(int i = strlen(str); i>-2; i--){
         if(str[i] != ','){
@@ -70,11 +70,11 @@ int readLine (int fd, char *str) { //quindi scandisco tutti i caratteri, a quest
 
 //M
 /*int random_failure(int result) {
-    srand(time(NULL)+20);  // Imposto un valore casuale al seed della funzione random utilizzando time 
+    srand(time(NULL)+20);  // Imposto un valore casuale al seed della funzione random utilizzando time
 
-    // Genero un numero casuale tra 0 e 9, se uguale a 7 modifico result 
+    // Genero un numero casuale tra 0 e 9, se uguale a 7 modifico result
     int rand = random()%10;
-    if(rand == 7)    
+    if(rand == 7)
         result += 20;
     return result;
 }*/
