@@ -4,6 +4,7 @@
 #include <sys/socket.h>
 #include <sys/un.h> /* For AF_UNIX sockets */
 #include <signal.h>
+#include <unistd.h>
 // #define I_AM_ALIVE SIGUSR2
 // #define SYSTEM_LOG "log/system_log.txt"
 // #define VOTED_OUTPUT "log/voted_output.txt"
