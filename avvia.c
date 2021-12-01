@@ -15,8 +15,8 @@ int main(int argc,char* argv[]){
     if(fopen("log/alreadyInstalled.txt", "r+") == NULL) {
         fopen("log/alreadyInstalled.txt", "w+");
         sleep(1);
-        system("cc inputManager.c -o bin/inputManager && cc P1.c -o bin/P1 && cc P2.c -o bin/P2 && cc P3.c -o bin/P3 && cc decisionFunction.c -o bin/DF /dev/null");
+        system("cc InputManager.c -o bin/InputManager && cc P1.c -o bin/P1 && cc P2.c -o bin/P2 && cc P3.c -o bin/P3 && cc decisionFunction.c -o bin/DF /dev/null");
         printf("\nCompilazione completata!\n");
     }
-    execl("bin/inputManager",argv[0],argv[1], argv[2]);
+    execl("bin/InputManager",argv[0],argv[1], argv[2], NULL);
 }
