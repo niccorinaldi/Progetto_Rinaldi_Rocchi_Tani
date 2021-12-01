@@ -70,26 +70,26 @@ int fileCondiviso(){
 }
 void creaFork(char MODE[15], char numChar[4]) {
     int pid;
+  
+  /*fork trasforma un singolo processo in due processi identici, riconoscibili come processo padre e processo figlio.
+  In caso di successo, ritorna 0 al processo figlio ed il process ID del processo figlio al processo padre;
+  in caso di esito negativo, ritorna -1 al processo padre, settando errno per indicare l'errore verificatosi,
+  e non viene creato nessun processo figlio.*/
 
-  /*  pid = fork();    //creazione di decisionFunction
+    pid = fork();    //creazione di decisionFunction
     if(pid < 0) {
         fprintf(stderr, "Fork failed\n");
         exit(-1);
     } else if(pid == 0) {
-        execl(DF, NULL);
-    }*/
-
-    /*fork trasforma un singolo processo in due processi identici, riconoscibili come processo padre e processo figlio.
-  In caso di successo, ritorna 0 al processo figlio ed il process ID del processo figlio al processo padre;
-  in caso di esito negativo, ritorna -1 al processo padre, settando errno per indicare l'errore verificatosi,
-  e non viene creato nessun processo figlio.*/
+        execl("bin/DF", NULL);
+    }
 
     pid = fork();   /*Creazione P1*/
     if(pid < 0) {
         fprintf(stderr, "Fork fallita\n");
         exit(-1);
     } else if (pid == 0) {
-        execl(P1, MODE, numChar, NULL);
+        execl("bin/P1", MODE, numChar, NULL);
     }
 
     pid = fork();   /*Creazione di P2*/
@@ -97,7 +97,7 @@ void creaFork(char MODE[15], char numChar[4]) {
         fprintf(stderr, "Fork fallita\n");
         exit(-1);
     } else if(pid == 0) {
-        execl(P2, MODE, numChar, NULL);
+        execl("bin/P2", MODE, numChar, NULL);
     }
 
     pid = fork();   /*Creazione di P3*/
@@ -105,7 +105,7 @@ void creaFork(char MODE[15], char numChar[4]) {
         fprintf(stderr, "Fork fallita\n");
         exit(-1);
     } else if(pid == 0) {
-        execl(P3, MODE, numChar, NULL);
+        execl("bin/P3", MODE, numChar, NULL);
     }
 
   /*  pid = fork();   //Creazione di failure manager
