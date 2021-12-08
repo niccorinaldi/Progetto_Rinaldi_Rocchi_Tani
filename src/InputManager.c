@@ -82,7 +82,7 @@ void creaFork(char MODE[15], char numChar[4]) {
         fprintf(stderr, "Fork fallita\n");
         exit(-1);
     } else if(pid == 0) {
-        execl("bin/DF", NULL);
+        execl("bin/DF", "bin/DF", NULL);
     }
 
     pid = fork();   /*Creazione P1*/
@@ -114,7 +114,7 @@ void creaFork(char MODE[15], char numChar[4]) {
         fprintf(stderr, "Fork fallita\n");
         exit(-1);
     } else if(pid == 0) {
-        execl("bin/FM", NULL);
+        execl("bin/FM", "bin/FM", NULL);
     }
 
     pid = fork();   /*Creazione di Watchdog*/
@@ -122,7 +122,7 @@ void creaFork(char MODE[15], char numChar[4]) {
         fprintf(stderr, "Fork fallita\n");
         exit(-1);
     } else if(pid == 0) {
-        execl("bin/WD", NULL);
+        execl("bin/WD", "bin/WD", NULL);
     }
 }
 
