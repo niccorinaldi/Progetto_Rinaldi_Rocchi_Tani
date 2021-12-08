@@ -46,15 +46,14 @@ void main (int argc, char* argv[]) {
     /* Definisco la lunghezza delle righe da leggere */
     int numChar = atoi(argv[2]); //verificare indice di argv (0)
 
-    int fdPipe, result = 0;
-    boolean failure = false;
+    int fdPipe, failure, result = 0;
     char buffer[numChar];
 
     /*definisco la modalità di avvio*/
     char MODE[15];
     strcpy(MODE, argv[1]);
     if(strcmp(MODE, "FALLIMENTO") == 0) {
-        failure = true;
+        failure = 1;
     }
 
     /* Rimuozione della pipe con nome se già esiste */
@@ -90,7 +89,7 @@ void main (int argc, char* argv[]) {
         }
 
         /* Modifica del risultato se avviato in modalità FALLIMENTO */
-        if(failure == true)
+        if(failure == 1)
             result = random_failure(result);
 
         /* Invio del risultato a decisionFunction */
