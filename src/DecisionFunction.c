@@ -78,13 +78,13 @@ void main(){
             /* Caso di successo (almeno due strighe uguali) */
             fwrite("SUCCESSO\n", 1, 9, system_log);
             fclose(system_log);
-  //          kill(0, I_AM_ALIVE);
+            //kill(0, I_AM_ALIVE);
         }
         else {
             /*caso di fallimento*/
             fwrite("FALLIMENTO\n", 1, 11, system_log);
             fclose(system_log);
-            kill(0,SIGUSR1);
+          //  kill(0,SIGUSR1);
         }
         count = 0;
 

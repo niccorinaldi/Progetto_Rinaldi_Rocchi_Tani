@@ -21,7 +21,7 @@ int connessioneSocket() {
     do { /*itera finchè non viene stabilita la connessione*/
         result = connect (fdConnessioneSocket, serverSockAddrPtr, serverLen);
         if (result == -1) {
-	        printf("connection problem P3;re-try in 1 sec\n");
+	        printf("Problema di connessione P3, riprovare tra 1 secondo\n");
 	        sleep (1);
         }
     } while (result == -1);
@@ -55,8 +55,6 @@ int main(int argc, char *argv[]){
   int failure=0;
   if(strcmp(MODE, "FALLIMENTO") == 0) {
       failure = 1;
-  } else {
-      failure = 0;
   }
 
   /* Creazione di due buffer che ospiteranno i dati ricevuti
@@ -67,7 +65,7 @@ int main(int argc, char *argv[]){
 
   fp = NULL;
   while (fp == NULL){
-      fp = fopen("Nome file", "r");  /*Apertura del file condiviso*/
+      fp = fopen("FileCondivisoP3.txt", "r");  /*Apertura del file condiviso*/
   }
   fread(buffer, 1, numChar, fp); //permette di leggere su un file un blocco di dati di qualsiasi tipo
   printf("%s\n", buffer); // %s\n stampa la stringa buffer
@@ -106,7 +104,7 @@ int main(int argc, char *argv[]){
           strcpy(bufferPrecedente, buffer);
       }
       fclose(fp);
-      fp = fopen("P3sharedFile.txt", "r");
+      fp = fopen("FileCondivisoP3.txt", "r");
       fread(buffer, 1, numChar, fp);
   }
   close(fdConnessioneSocket);
