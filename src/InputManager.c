@@ -98,7 +98,7 @@ void creaFork(char MODE[15], char numChar[4]) {
         fprintf(stderr, "Fork fallita\n");
         exit(-1);
     } else if(pid == 0) {
-        execl("bin/P2", MODE, numChar, NULL);
+        execl("bin/P2", "bin/p2", MODE, numChar, NULL);
     }
 
     pid = fork();   /*Creazione di P3*/
@@ -106,7 +106,7 @@ void creaFork(char MODE[15], char numChar[4]) {
         fprintf(stderr, "Fork fallita\n");
         exit(-1);
     } else if(pid == 0) {
-        execl("bin/P3", MODE, numChar, NULL);
+        execl("bin/P3", "bin/P3", MODE, numChar, NULL);
     }
 
     pid = fork();   /*Creazione di FailureManager*/
