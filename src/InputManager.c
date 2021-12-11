@@ -41,8 +41,8 @@ int connessioneSocket() {
 
   socketFd = socket (AF_UNIX, SOCK_STREAM, 0); // istanzia la socket  //metti anche 0 invece di "DEFAULT_PROTOCOL"  //file descriptor (descrittore di file associato al nuovo socket creato)
   serverUNIXAddress.sun_family = AF_UNIX; // dominio del server (client e server sono sulla stessa macchina -> rel.)
-  unlink ("SocketP2"); //invochiamo un unlink() del nome "SocketP2" perché potrebbe già esistere un sockey avente lo stesso nome (causando errore)
   strcpy (serverUNIXAddress.sun_path, "SocketP2");
+  unlink ("SocketP2"); //invochiamo un unlink() del nome "SocketP2" perché potrebbe già esistere un sockey avente lo stesso nome (causando errore)
   bind(socketFd, serverSockAddrPtr, serverLen); // definisce il nome della socket //VEDI BENE
   listen(socketFd, 1);  //ascolta la coda delle connessioni  //In questo modo gli dico che il numero massimo di richieste pendenti è 1
 
