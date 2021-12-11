@@ -90,7 +90,7 @@ void creaFork(char MODE[15], char numChar[4]) {
         fprintf(stderr, "Fork fallita\n");
         exit(-1);
     } else if (pid == 0) {
-        execl("bin/P1", MODE, numChar, NULL);
+        execl("bin/P1", "bin/P1", MODE, numChar, NULL);
     }
 
     pid = fork();   /*Creazione di P2*/
