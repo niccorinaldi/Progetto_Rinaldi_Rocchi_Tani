@@ -36,7 +36,7 @@ int DecisionFunctionSocketConnection()
     serverLen = sizeof (serverUNIXAddress);
     clientFd = socket (AF_UNIX, SOCK_STREAM, 0);
     serverUNIXAddress.sun_family = AF_UNIX;
-    strcpy (serverUNIXAddress.sun_path, "SOCKETDF");
+    strcpy (serverUNIXAddress.sun_path, "DFsocket");
     do {
         connection = connect (clientFd, serverSockAddrPtr, serverLen);
         if (connection == -1) {
