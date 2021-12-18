@@ -185,7 +185,7 @@ int main(int argc, char *argv[]){
   /* Connessione alla socket di P2*/
   int fdConnessioneSocket = connessioneSocket();
   
-  printf("Elaborazione in corso...");
+  printf("Elaborazione in corso...\n");
 
   while(fgets(buffer, numChar, filePointer)){
     write(fdConnessionePipe, buffer, numChar);
