@@ -76,7 +76,7 @@ void main (int argc, char* argv[]) {
     int fdConnessioneSocket = connessioneSocket();
 
     /* Creazione del buffer di invio */
-    char* bufferInvio[6];
+    char bufferInvio[6];
 
     /* Ricezione dei messaggi */
     while (1) //verificare quando termina
@@ -99,7 +99,7 @@ void main (int argc, char* argv[]) {
             result = random_failure(result);
 
         /* Invio del risultato a decisionFunction */
-        snprintf(*bufferInvio,6,"%d\n",result);/* Salvataggio del risultato in un buffer di invio */
+        snprintf(bufferInvio,6,"%d\n",result);/* Salvataggio del risultato in un buffer di invio */
         write(fdConnessioneSocket,bufferInvio,6);
         result = 0;
     }
