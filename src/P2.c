@@ -122,7 +122,7 @@ int main(int argc, char* argv[]) {
  }
 
  clientFd = InputManagerSocketConnection();
-  printf("P2 è pronto\n");
+  printf("P2 PRONTO\n");
   int count = 0;
   while(readLine(clientFd, str)) { // Legge finché trova qualcosa da leggere
     sumResult = sum(str);
@@ -139,6 +139,6 @@ int main(int argc, char* argv[]) {
     sendToDecisionFunction(clientDecisionFunction, -1); // Avviso Decision Function che ho terminato
     close(clientDecisionFunction);
     close (clientFd);
-    printf("P2 terminato\n");
+    printf("P2 TERMINATO\n");
     return 0;
 }
