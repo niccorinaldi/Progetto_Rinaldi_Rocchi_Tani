@@ -188,6 +188,8 @@ int main(int argc, char *argv[]){
   printf("Elaborazione in corso...\n");
 
   while(fgets(buffer, numChar, filePointer)){
+    char* a=fgets(buffer, numChar, filePointer);
+    printf("ok\n");
     write(fdConnessionePipe, buffer, numChar);
     write (fdConnessioneSocket, buffer, numChar); //sendToSocket
     write(fdFileCondiviso, buffer, numChar);
