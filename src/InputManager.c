@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <signal.h>
+#define I_AM_ALIVE SIGUSR2
 
 //metodo per la creazione di P1 --> pipe
 int connessionePipe(){
@@ -127,6 +128,10 @@ void creaFork(char MODE[15], char numChar[4]) {
 }
 
 int main(int argc, char *argv[]){
+  
+  /* Ignoro i segnali SIGUSR1 e I_AM_ALIVE */
+  signal(SIGUSR1, SIG_IGN);
+  signal(I_AM_ALIVE, SIG_IGN);
 
   //Apertura file dataset.csv in sola lettura
   FILE *filePointer = fopen(argv[2], "r");
