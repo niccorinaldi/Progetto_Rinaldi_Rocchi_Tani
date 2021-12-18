@@ -47,12 +47,12 @@ void main(int argc, char *argv[]){
   signal(I_AM_ALIVE, SIG_IGN);
 
   /* Definisco la lunghezza delle righe da leggere */
-  int numChar = atoi(argv[1]) - 1; //converte una stringa in intero
+  int numChar = atoi(argv[2]) - 1; //converte una stringa in intero
 
   /*definisco la modalità di avvio*/
   FILE *fp;
   char MODE[15];
-  strcpy(MODE, argv[0]);
+  strcpy(MODE, argv[1]);
   int failure=0;
   if(strcmp(MODE, "FALLIMENTO") == 0) {
       failure = 1;
