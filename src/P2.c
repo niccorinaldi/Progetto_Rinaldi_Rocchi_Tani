@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <sys/un.h> /* For AF_UNIX sockets */
 #include <unistd.h> //per usare read()
+#define I_AM_ALIVE SIGUSR2
 
 int InputManagerSocketConnection() {
   int clientFd, serverLen, connection; //connection è la differenza tra lui e inputManager -> vedi
@@ -100,6 +101,10 @@ void sendToDecisionFunction(int clientDecisionFunction, int sum) {
 
 
 int main(int argc, char* argv[]) {
+  /* Ignoro i segnali SIGUSR1 e I_AM_ALIVE */
+  signal(SIGUSR1, SIG_IGN);
+  signal(I_AM_ALIVE, SIG_IGN);
+  
   int clientFd;
   int clientDecisionFunction;
   int numChar = atoi(argv[2]);
