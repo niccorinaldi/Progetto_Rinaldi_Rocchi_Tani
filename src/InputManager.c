@@ -118,13 +118,13 @@ void creaFork(char MODE[15], char numChar[4]) {
         execl("bin/FM", "bin/FM", NULL);
     }
 
-    pid = fork();   /*Creazione di Watchdog*/
-    if(pid < 0) {
+    //pid = fork();   /*Creazione di Watchdog*/
+    /*if(pid < 0) {
         fprintf(stderr, "Fork fallita\n");
         exit(-1);
     } else if(pid == 0) {
         execl("bin/WD", "bin/WD", NULL);
-    }
+    }*/
 }
 
 int main(int argc, char *argv[]){
