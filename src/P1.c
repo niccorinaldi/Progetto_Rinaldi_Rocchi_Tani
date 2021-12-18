@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <sys/un.h> /*For AF_UNIX sockets */
+#define I_AM_ALIVE SIGUSR2
 
 int connessioneSocket() {
     int fdConnessioneSocket, serverLen, result;
@@ -45,6 +46,9 @@ void main (int argc, char* argv[]) {
 
     /* Definisco la lunghezza delle righe da leggere */
     int numChar = atoi(argv[2]); //verificare indice di argv (0)
+   
+    signal(SIGUSR1, SIG_IGN);
+    signal(I_AM_ALIVE, SIG_IGN);
 
     int fdPipe, failure, result = 0;
     char buffer[numChar];
