@@ -5,7 +5,7 @@
 #include <sys/un.h> /* For AF_UNIX sockets */
 #include <signal.h>
 #include <unistd.h>
-// #define I_AM_ALIVE SIGUSR2
+#define I_AM_ALIVE SIGUSR2
 #define SYSTEM_LOG "log/system_log.txt"
 #define VOTED_OUTPUT "log/voted_output.txt"
 
@@ -18,7 +18,7 @@ void main(){
     voted_output = fopen(VOTED_OUTPUT, "w");
 
     /* Handler per interruzione con CONTROL-C */
-    signal(SIGINT, SIG_IGN); //?????????????
+   // signal(SIGINT, SIG_IGN); //?????????????
 
     /* Ignoro i segnali SIGUSR1 e I_AM_ALIVE */
     //signal(SIGUSR1, SIG_IGN);
