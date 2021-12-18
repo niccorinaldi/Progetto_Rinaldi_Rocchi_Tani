@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+#define I_AM_ALIVE SIGUSR2
 
 int connessioneSocket() {
     int fdConnessioneSocket, serverLen, result;
@@ -42,8 +43,8 @@ int random_failure(int result) {
 int main(int argc, char *argv[]){
 
   /* Ignoro i segnali SIGUSR1 e I_AM_ALIVE */
-  /*signal(SIGUSR1, SIG_IGN);
-  signal(I_AM_ALIVE, SIG_IGN);*/
+  signal(SIGUSR1, SIG_IGN);
+  signal(I_AM_ALIVE, SIG_IGN);
 
   /* Definisco la lunghezza delle righe da leggere */
   int numChar = atoi(argv[1]) - 1; //converte una stringa in intero
