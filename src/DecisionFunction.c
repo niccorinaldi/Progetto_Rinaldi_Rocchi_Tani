@@ -18,11 +18,11 @@ void main(){
     voted_output = fopen(VOTED_OUTPUT, "w");
 
     /* Handler per interruzione con CONTROL-C */
-   // signal(SIGINT, SIG_IGN); //?????????????
+    signal(SIGINT, SIG_IGN); //?????????????
 
     /* Ignoro i segnali SIGUSR1 e I_AM_ALIVE */
-    //signal(SIGUSR1, SIG_IGN);
-    //signal(I_AM_ALIVE, SIG_IGN);
+    signal(SIGUSR1, SIG_IGN);
+    signal(I_AM_ALIVE, SIG_IGN);
 
     /* Creazione della socket DFsocket */
     int serverFd, clientFd1, clientFd2, clientFd3, serverLen, clientLen;
@@ -78,13 +78,13 @@ void main(){
             /* Caso di successo (almeno due strighe uguali) */
             fwrite("SUCCESSO\n", 1, 9, system_log);
             fclose(system_log);
-            //kill(0, I_AM_ALIVE);
+            kill(0, I_AM_ALIVE);
         }
         else {
             /*caso di fallimento*/
             fwrite("FALLIMENTO\n", 1, 11, system_log);
             fclose(system_log);
-          //  kill(0,SIGUSR1);
+            kill(0,SIGUSR1);
         }
         count = 0;
 
