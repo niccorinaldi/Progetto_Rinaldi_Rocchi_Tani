@@ -18,7 +18,7 @@ void main(){
     voted_output = fopen(VOTED_OUTPUT, "w");
 
     /* Handler per interruzione con CONTROL-C */
-    signal(SIGINT, SIG_IGN); //?????????????
+    signal(SIGINT, SIG_IGN); 
 
     /* Ignoro i segnali SIGUSR1 e I_AM_ALIVE */
     signal(SIGUSR1, SIG_IGN);
