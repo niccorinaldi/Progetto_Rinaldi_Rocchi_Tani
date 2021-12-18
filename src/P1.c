@@ -79,7 +79,7 @@ void main (int argc, char* argv[]) {
     char bufferInvio[6];
 
     /* Ricezione dei messaggi */
-    while (read(fdPipe, buffer, numChar);) //verificare quando termina
+    while (read(fdPipe, buffer, numChar)) //verificare quando termina
     {
         //read(fdPipe, buffer, numChar);
         /* Operazione sui dati ricevuti con string token */
