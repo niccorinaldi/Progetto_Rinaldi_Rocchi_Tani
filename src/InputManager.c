@@ -168,6 +168,9 @@ int main(int argc, char *argv[]){
 
   fseek(filePointer, -numChar, 1); // Riposizionamento all'inizio della seconda riga
   char buffer[numChar]; //tutte le righe dovrebbero essere uguali
+  
+  /*Connessione al file condiviso di P3*/
+  int fdFileCondiviso = fileCondiviso();
 
   //Scorrerre tutto il file inviando le righe ai processi con tempo 1 secondo
   /* Buffer per il passaggio di numChar ai figli */
@@ -181,8 +184,8 @@ int main(int argc, char *argv[]){
   int fdConnessionePipe = connessionePipe();
   /* Connessione alla socket di P2*/
   int fdConnessioneSocket = connessioneSocket();
-  /*Connessione al file condiviso di P3*/
-  int fdFileCondiviso = fileCondiviso();
+  
+  printf("Elaborazione in corso...");
 
   while(fgets(buffer, numChar, filePointer)){
     write(fdConnessionePipe, buffer, numChar);
