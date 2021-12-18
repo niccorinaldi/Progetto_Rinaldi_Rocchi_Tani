@@ -17,6 +17,7 @@ int InputManagerSocketConnection() {
   clientFd = socket (AF_UNIX, SOCK_STREAM, 0); //righe 13 e 14 differenziazione con IM
   serverUNIXAddress.sun_family = AF_UNIX; // dominio del server (client e server sono sulla stessa macchina -> rel.)
   strcpy (serverUNIXAddress.sun_path, "SocketP2"); //nome del server (Nel progetto di Fili è senza virgolette -> vedi)
+  unlink("SocketP2"); 
   do{ //ciclo finché non riesco a stabilire una connessione con il server
       connection = connect (clientFd, serverSockAddrPtr, serverLen); //restituisce 0 in caso di successo, -1 altrimenti
       if(connection == -1){
