@@ -3,6 +3,7 @@
 #include <time.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <signal.h>
 #include <sys/un.h> /* For AF_UNIX sockets */
 #include <unistd.h> //per usare read()
 #define I_AM_ALIVE SIGUSR2
