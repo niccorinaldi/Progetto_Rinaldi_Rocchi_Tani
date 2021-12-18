@@ -68,6 +68,7 @@ int main(int argc, char *argv[]){
   while (fp == NULL){
       fp = fopen("FileCondivisoP3.txt", "r");  /*Apertura del file condiviso*/
   }
+  printf("P3 PRONTO\n");
   fread(buffer, 1, numChar, fp); //permette di leggere su un file un blocco di dati di qualsiasi tipo
   printf("%s\n", buffer); // %s\n stampa la stringa buffer
 
@@ -109,5 +110,5 @@ int main(int argc, char *argv[]){
       fread(buffer, 1, numChar, fp);
   }
   close(fdConnessioneSocket);
-
+  printf("P3 TERMINATO\n");
 }
