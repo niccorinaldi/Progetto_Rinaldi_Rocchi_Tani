@@ -99,7 +99,7 @@ void main (int argc, char* argv[]) {
             result = random_failure(result);
 
         /* Invio del risultato a decisionFunction */
-        snprintf(*bufferInvio,6,"%d\n",result);/* Salvataggio del risultato in un buffer di invio */
+        snprintf(bufferInvio,6,"%d\n",result);/* Salvataggio del risultato in un buffer di invio */
         write(fdConnessioneSocket,bufferInvio,6);
         result = 0;
     }
