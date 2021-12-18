@@ -6,8 +6,8 @@
 #include <signal.h>
 #include <unistd.h>
 #define I_AM_ALIVE SIGUSR2
-#define SYSTEM_LOG "log/system_log.txt"
-#define VOTED_OUTPUT "log/voted_output.txt"
+#define SYSTEM_LOG "./log/system_log.txt"
+#define VOTED_OUTPUT "./log/voted_output.txt"
 
 /* Dichiarazione dei file di log */
 FILE* system_log; //scrivere sopra SUCCESSO o FALLIMENTO
