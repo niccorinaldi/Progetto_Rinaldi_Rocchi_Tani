@@ -69,6 +69,8 @@ void main (int argc, char* argv[]) {
     /* Settaggio dei permessi */
     chmod ("PipeP1", 0660);
     fdPipe = open ("PipeP1", O_RDONLY);
+	
+    printf("P1 PRONTO");
 
     /* Connessione a decisionFunction */
     int fdConnessioneSocket = connessioneSocket();
@@ -104,4 +106,5 @@ void main (int argc, char* argv[]) {
     close (fdPipe);
     close (fdConnessioneSocket);
     unlink("PipeP1");
+    printf("P1 TERMINATO");
 }
