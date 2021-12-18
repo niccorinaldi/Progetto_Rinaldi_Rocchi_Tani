@@ -40,7 +40,7 @@ int random_failure(int result) {
     return result;
 }
 
-int main(int argc, char *argv[]){
+void main(int argc, char *argv[]){
 
   /* Ignoro i segnali SIGUSR1 e I_AM_ALIVE */
   signal(SIGUSR1, SIG_IGN);
