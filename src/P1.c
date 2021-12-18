@@ -79,9 +79,9 @@ void main (int argc, char* argv[]) {
     char bufferInvio[6];
 
     /* Ricezione dei messaggi */
-    while (1) //verificare quando termina
+    while (read(fdPipe, buffer, numChar);) //verificare quando termina
     {
-        read(fdPipe, buffer, numChar);
+        //read(fdPipe, buffer, numChar);
         /* Operazione sui dati ricevuti con string token */
         char* blocco = strtok(buffer, ",");
         while (blocco != NULL)
