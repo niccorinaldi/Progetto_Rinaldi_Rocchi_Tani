@@ -124,21 +124,25 @@ int main(int argc, char* argv[]) {
  clientFd = InputManagerSocketConnection();
   printf("P2 PRONTO\n");
   int count = 0;
+  char bufferInvio[6];
+  int fdConnessioneSocket = DecisionFunctionSocketConnection();
   while(readLine(clientFd, str)) { // Legge finché trova qualcosa da leggere
-    sumResult = sum(str);
+    int sumResult = 0; //vedi se puoi non inizializzarlo
+    for(int i = strlen(str); i>-2; i--){
+    if(str[i] != ',') {
+      sumResult += str[i];
+    }
+  }
     if(failure == 1){
       sumResult += random_failure(sumResult);
     }
-    clientDecisionFunction = DecisionFunctionSocketConnection();
-    sendToDecisionFunction(clientDecisionFunction, sumResult);
-    close(clientDecisionFunction);
+    
+    snprintf(bufferInvio, 6, "%d\n", sumResult);
+    write(fdConnessioneSocket, bufferInvio, 6);
     sleep(1);
   }
 
-    clientDecisionFunction = DecisionFunctionSocketConnection();
-    sendToDecisionFunction(clientDecisionFunction, -1); // Avviso Decision Function che ho terminato
-    close(clientDecisionFunction);
-    close (clientFd);
+    //Manca le close
     printf("P2 TERMINATO\n");
     return 0;
 }
