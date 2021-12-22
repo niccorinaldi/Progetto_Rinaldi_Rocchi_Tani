@@ -15,7 +15,7 @@ int connessionePipe(){
   while(fdPipe != -1){
     fdPipe = open("PipeP1", O_WRONLY); //apertura pipe in sola scrittura
     if(fdPipe == -1){
-      printf("Errore apetura pipe");
+      printf("Errore apetura pipe\n");
       fdPipe = 0;
       sleep(1);
     }
@@ -59,7 +59,7 @@ int fileCondiviso(){
   while(fdFile != -1){
     fdFile = open("FileCondivisoP3.txt", O_CREAT|O_WRONLY|O_TRUNC, 0777); //creazione file condiviso create-> creare | O_WRONLY-> sola scrittura | O_TRUNC-> se il file esiste gia lo tronca a zero
     if(fdFile == -1){
-      printf("Errore apetura pipe");
+      printf("Errore apetura file\n");
       fdFile=0;
       sleep(1);
     }
