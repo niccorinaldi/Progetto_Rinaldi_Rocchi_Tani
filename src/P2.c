@@ -126,6 +126,7 @@ int main(int argc, char* argv[]) {
   int count = 0;
   char bufferInvio[6];
   int fdConnessioneSocket = DecisionFunctionSocketConnection();
+  
   while(readLine(clientFd, str)) { // Legge finché trova qualcosa da leggere
     int sumResult = 0; //vedi se puoi non inizializzarlo
     for(int i = strlen(str); i>-2; i--){
@@ -137,8 +138,10 @@ int main(int argc, char* argv[]) {
       sumResult += random_failure(sumResult);
     }
     
+
     snprintf(bufferInvio, 6, "%d\n", sumResult);
     write(fdConnessioneSocket, bufferInvio, 6);
+   
     sleep(1);
   }
 

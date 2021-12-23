@@ -97,6 +97,7 @@ void main(int argc, char *argv[]){
           if(failure == 1)
               result = random_failure(result);
 
+       // printf("%d\n", failure);
           /* Invio del risultato a decisionFunction */
           snprintf(bufferInvio,6,"%d\n",result); //formatta e memorizza una serie di caratteri e valori nel buffer dell'array
           write(fdConnessioneSocket,bufferInvio,6);
@@ -108,6 +109,7 @@ void main(int argc, char *argv[]){
       fclose(fp);
       fp = fopen("FileCondivisoP3.txt", "r");
       fread(buffer, 1, numChar, fp);
+   
   }
   close(fdConnessioneSocket);
   printf("P3 TERMINATO\n");

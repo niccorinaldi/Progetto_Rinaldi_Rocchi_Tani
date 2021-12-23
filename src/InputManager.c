@@ -170,7 +170,7 @@ int main(int argc, char *argv[]){
   char buffer[numChar]; //tutte le righe dovrebbero essere uguali
   
   /*Connessione al file condiviso di P3*/
-  int fdFileCondiviso = fileCondiviso();
+  FILE* fileCondiviso = fopen("FileCondivisoP3.txt", "w");
 
   //Scorrerre tutto il file inviando le righe ai processi con tempo 1 secondo
   /* Buffer per il passaggio di numChar ai figli */
@@ -189,17 +189,21 @@ int main(int argc, char *argv[]){
 
   while(1){
     fgets(buffer, numChar, filePointer);
-
+if(*buffer != '\n'){
     write(fdConnessionePipe, buffer, numChar);
     write (fdConnessioneSocket, buffer, numChar); //sendToSocket
-    write(fdFileCondiviso, buffer, numChar);
+    
+    /* Protocollo di invio a P3 */
+            fputs(buffer, fileCondiviso);    
+            fseek(fileCondiviso, 0, SEEK_SET);
+   
     sleep(1);
+    }
   }
 
   //chiudere tutto (fclose)
   close(fdConnessionePipe); //chiusura client
   close(fdConnessioneSocket); //chiusura socket
-  close(fdFileCondiviso);
   printf("Finito :) \n");
   return 0;
 }

@@ -79,6 +79,7 @@ void main (int argc, char* argv[]) {
     char bufferInvio[6];
 
     /* Ricezione dei messaggi */
+    
     while (1) //verificare quando termina
     {
         read(fdPipe, buffer, numChar);
@@ -102,6 +103,7 @@ void main (int argc, char* argv[]) {
         snprintf(bufferInvio,6,"%d\n",result);/* Salvataggio del risultato in un buffer di invio */
         write(fdConnessioneSocket,bufferInvio,6);
         result = 0;
+       
     }
     close (fdPipe);
     close (fdConnessioneSocket);
