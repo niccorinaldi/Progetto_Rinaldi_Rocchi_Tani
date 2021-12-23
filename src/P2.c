@@ -135,7 +135,7 @@ int main(int argc, char* argv[]) {
     }
   }
     if(failure == 1){
-      sumResult += random_failure(sumResult);
+      sumResult = random_failure(sumResult);
     }
     
 
