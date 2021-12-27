@@ -42,6 +42,16 @@ int random_failure(int result) {
         result += 10;
     return result;
 }
+
+int readLine (int fd, char *str) { //quindi scandisco tutti i caratteri, a questo punto devo trovare il modo di sommarli non tenendo in considerazione le virgole
+/* Read a single ’\0’-terminated line into str from fd */
+int n;
+do { /* Read characters until ’\0’ or end-of-input */
+  n = read (fd, str, 1); /* Read one character */
+ } while (n > 0 && *str++ != '\0');
+ return (n > 0);
+} /* Return false if end-of-input */
+
 void main (int argc, char* argv[]) {
 
     /* Definisco la lunghezza delle righe da leggere */
@@ -80,9 +90,9 @@ void main (int argc, char* argv[]) {
 
     /* Ricezione dei messaggi */
     
-    while (1) //verificare quando termina
+    while (readLine(fdPipe, buffer) //verificare quando termina
     {
-        read(fdPipe, buffer, numChar);
+    //    read(fdPipe, buffer, numChar);
         /* Operazione sui dati ricevuti con string token */
         char* blocco = strtok(buffer, ",");
         while (blocco != NULL)
