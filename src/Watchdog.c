@@ -4,8 +4,12 @@
 #include <signal.h>
 #define I_AM_ALIVE SIGUSR2
 
-int aliveControl(int);
+
 int flag = 0;
+
+int aliveControl(int sig) {
+    flag = 0;
+}
 
 void main() {
     signal(I_AM_ALIVE, aliveControl);
@@ -19,6 +23,3 @@ void main() {
     }
 }
 
-int aliveControl(int sig) {
-    flag = 0;
-}

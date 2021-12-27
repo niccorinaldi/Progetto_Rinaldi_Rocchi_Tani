@@ -116,13 +116,13 @@ void creaFork(char MODE[15], char numChar[4]) {
         execl("bin/FM", "bin/FM", NULL);
     }
 
-    //pid = fork();   /*Creazione di Watchdog*/
-    /*if(pid < 0) {
+    pid = fork();   /*Creazione di Watchdog*/
+    if(pid < 0) {
         fprintf(stderr, "Fork fallita\n");
         exit(-1);
     } else if(pid == 0) {
         execl("bin/WD", "bin/WD", NULL);
-    }*/
+    }
 }
 
 int main(int argc, char *argv[]){
@@ -166,6 +166,8 @@ int main(int argc, char *argv[]){
 
   fseek(filePointer, -numChar, 1); // Riposizionamento all'inizio della seconda riga
   char buffer[numChar]; //tutte le righe dovrebbero essere uguali
+  
+  printf("Elaborazione in corso...\n");
 
   /*Connessione al file condiviso di P3*/
   FILE* fileCondiviso = fopen("FileCondivisoP3.txt", "w");
@@ -183,10 +185,8 @@ int main(int argc, char *argv[]){
   /* Connessione alla socket di P2*/
   int fdConnessioneSocket = connessioneSocket();
 
-  printf("Elaborazione in corso...\n");
-
-  while(fgets(buffer, numChar, filePointer)){
-  //  fgets(buffer, numChar, filePointer);
+  while(1){
+    fgets(buffer, numChar, filePointer);
 
     if(*buffer != '\n'){
     write(fdConnessionePipe, buffer, numChar);

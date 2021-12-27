@@ -151,6 +151,5 @@ int main(int argc, char* argv[]) {
     close(clientFd);
     close(fdConnessioneSocket);
     printf("P2 TERMINATO\n");
-    unlink("SocketP2");
     return 0;
 }

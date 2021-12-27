@@ -59,12 +59,12 @@ void main(){
     char firstResult[6], secondResult[6], thirdResult[6];
     int count = 0;
 
-    while (readLine(clientFd1,firstResult) || readLine(clientFd2,secondResult) || readLine(clientFd3,thirdResult))
+    while (1)
     {
         /* Recezione dei dati */
-  //      read(clientFd1,firstResult,6);
-  //      read(clientFd2,secondResult,6);
-  //      read(clientFd3,thirdResult,6);
+        read(clientFd1,firstResult,6);
+        read(clientFd2,secondResult,6);
+        read(clientFd3,thirdResult,6);
 
         /* Scrittura su voted_output dei valori:
            I dati sono scritti in terne separate da uno '\n' */

@@ -79,8 +79,8 @@ void main(int argc, char *argv[]){
   int fdConnessioneSocket = connessioneSocket();
 
   /* Creazione del buffer di invio */
-  char bufferInvio[6]; //perchè 6?
-
+  char bufferInvio[6]; //perchè 6
+ 
   while (1){
   
       /* Controllo che le stringhe siano diverse, altrimenti aspetto una modifica */
@@ -98,6 +98,7 @@ void main(int argc, char *argv[]){
               result = random_failure(result);
 
           /* Invio del risultato a decisionFunction */
+       
           snprintf(bufferInvio,6,"%d\n",result); //formatta e memorizza una serie di caratteri e valori nel buffer dell'array
           write(fdConnessioneSocket,bufferInvio,6);
           result = 0;
