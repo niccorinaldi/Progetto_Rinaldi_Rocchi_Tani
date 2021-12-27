@@ -185,8 +185,8 @@ int main(int argc, char *argv[]){
 
   printf("Elaborazione in corso...\n");
 
-  while(1){
-    fgets(buffer, numChar, filePointer);
+  while(fgets(buffer, numChar, filePointer)){
+  //  fgets(buffer, numChar, filePointer);
 
     if(*buffer != '\n'){
     write(fdConnessionePipe, buffer, numChar);
