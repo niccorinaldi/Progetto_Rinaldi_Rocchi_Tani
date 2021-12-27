@@ -128,7 +128,7 @@ void creaFork(char MODE[15], char numChar[4]) {
 }
 
 int main(int argc, char *argv[]){
-  
+
   /* Ignoro i segnali SIGUSR1 e I_AM_ALIVE */
   signal(SIGUSR1, SIG_IGN);
   signal(I_AM_ALIVE, SIG_IGN);
@@ -168,7 +168,7 @@ int main(int argc, char *argv[]){
 
   fseek(filePointer, -numChar, 1); // Riposizionamento all'inizio della seconda riga
   char buffer[numChar]; //tutte le righe dovrebbero essere uguali
-  
+
   /*Connessione al file condiviso di P3*/
   FILE* fileCondiviso = fopen("FileCondivisoP3.txt", "w");
 
@@ -184,19 +184,20 @@ int main(int argc, char *argv[]){
   int fdConnessionePipe = connessionePipe();
   /* Connessione alla socket di P2*/
   int fdConnessioneSocket = connessioneSocket();
-  
+
   printf("Elaborazione in corso...\n");
 
   while(1){
     fgets(buffer, numChar, filePointer);
-if(*buffer != '\n'){
+
+    if(*buffer != '\n'){
     write(fdConnessionePipe, buffer, numChar);
     write (fdConnessioneSocket, buffer, numChar); //sendToSocket
-    
+
     /* Protocollo di invio a P3 */
-            fputs(buffer, fileCondiviso);    
+            fputs(buffer, fileCondiviso);
             fseek(fileCondiviso, 0, SEEK_SET);
-   
+
     sleep(1);
     }
   }
@@ -204,6 +205,8 @@ if(*buffer != '\n'){
   //chiudere tutto (fclose)
   close(fdConnessionePipe); //chiusura client
   close(fdConnessioneSocket); //chiusura socket
+  fflush(fileCondiviso);
+  fclose(fileCondiviso);
   printf("Finito :) \n");
   return 0;
 }

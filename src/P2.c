@@ -17,7 +17,7 @@ int InputManagerSocketConnection() {
   clientFd = socket (AF_UNIX, SOCK_STREAM, 0); //righe 13 e 14 differenziazione con IM
   serverUNIXAddress.sun_family = AF_UNIX; // dominio del server (client e server sono sulla stessa macchina -> rel.)
   strcpy (serverUNIXAddress.sun_path, "SocketP2"); //nome del server (Nel progetto di Fili è senza virgolette -> vedi)
-  unlink("SocketP2"); 
+  unlink("SocketP2");
   do{ //ciclo finché non riesco a stabilire una connessione con il server
       connection = connect (clientFd, serverSockAddrPtr, serverLen); //restituisce 0 in caso di successo, -1 altrimenti
       if(connection == -1){
@@ -103,10 +103,11 @@ void sendToDecisionFunction(int clientDecisionFunction, int sum) {
 
 
 int main(int argc, char* argv[]) {
+  
   /* Ignoro i segnali SIGUSR1 e I_AM_ALIVE */
   signal(SIGUSR1, SIG_IGN);
   signal(I_AM_ALIVE, SIG_IGN);
-  
+
   int clientFd;
   int clientDecisionFunction;
   int numChar = atoi(argv[2]);
@@ -126,7 +127,7 @@ int main(int argc, char* argv[]) {
   int count = 0;
   char bufferInvio[6];
   int fdConnessioneSocket = DecisionFunctionSocketConnection();
-  
+
   while(readLine(clientFd, str)) { // Legge finché trova qualcosa da leggere
     int sumResult = 0; //vedi se puoi non inizializzarlo
     for(int i = strlen(str); i>-2; i--){
@@ -137,15 +138,16 @@ int main(int argc, char* argv[]) {
     if(failure == 1){
       sumResult = random_failure(sumResult);
     }
-    
+
 
     snprintf(bufferInvio, 6, "%d\n", sumResult);
     write(fdConnessioneSocket, bufferInvio, 6);
-   
+
     sleep(1);
   }
 
-    //Manca le close
+    close(clientFd);
+    close(fdConnessioneSocket);
     printf("P2 TERMINATO\n");
     return 0;
 }
