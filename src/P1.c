@@ -90,7 +90,7 @@ void main (int argc, char* argv[]) {
 
     /* Ricezione dei messaggi */
     
-    while (readLine(fdPipe, buffer) //verificare quando termina
+    while (readLine(fdPipe, buffer)) //verificare quando termina
     {
     //    read(fdPipe, buffer, numChar);
         /* Operazione sui dati ricevuti con string token */
