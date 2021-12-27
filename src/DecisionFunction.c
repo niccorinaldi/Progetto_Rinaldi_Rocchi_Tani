@@ -13,6 +13,15 @@
 FILE* system_log; //scrivere sopra SUCCESSO o FALLIMENTO
 FILE* voted_output; //scrivere sopra i valori ricevuti da P1, P2, P3
 
+int readLine (int fd, char *str) { //quindi scandisco tutti i caratteri, a questo punto devo trovare il modo di sommarli non tenendo in considerazione le virgole
+/* Read a single ’\0’-terminated line into str from fd */
+int n;
+do { /* Read characters until ’\0’ or end-of-input */
+  n = read (fd, str, 1); /* Read one character */
+ } while (n > 0 && *str++ != '\0');
+ return (n > 0);
+} /* Return false if end-of-input */
+
 void main(){
     system_log = fopen(SYSTEM_LOG, "w"); //li prede da run e li definisce sopra tra le librerie
     voted_output = fopen(VOTED_OUTPUT, "w");
