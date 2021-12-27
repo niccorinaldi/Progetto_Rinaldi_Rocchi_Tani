@@ -90,6 +90,7 @@ void main(){
 
         voted_output = fopen(VOTED_OUTPUT, "a");
         system_log = fopen(SYSTEM_LOG, "a");
+        
     }
     close(clientFd1);
     close(clientFd2);

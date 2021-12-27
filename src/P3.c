@@ -81,8 +81,8 @@ void main(int argc, char *argv[]){
   /* Creazione del buffer di invio */
   char bufferInvio[6]; //perchè 6?
 
-  while (1) //ciclo infinito, si ferma quando incontra break o return. Perchè 1!=0 è una condizione sempre vera
-  {
+  while (1){
+  
       /* Controllo che le stringhe siano diverse, altrimenti aspetto una modifica */
       if (strcmp(buffer, bufferPrecedente) != 0)
       {
@@ -97,7 +97,6 @@ void main(int argc, char *argv[]){
           if(failure == 1)
               result = random_failure(result);
 
-       // printf("%d\n", failure);
           /* Invio del risultato a decisionFunction */
           snprintf(bufferInvio,6,"%d\n",result); //formatta e memorizza una serie di caratteri e valori nel buffer dell'array
           write(fdConnessioneSocket,bufferInvio,6);
@@ -105,11 +104,12 @@ void main(int argc, char *argv[]){
 
           /* Aggiorno bufferPrecedente con il nuovo buffer */
           strcpy(bufferPrecedente, buffer);
+          
       }
       fclose(fp);
       fp = fopen("FileCondivisoP3.txt", "r");
       fread(buffer, 1, numChar, fp);
-   
+  
   }
   close(fdConnessioneSocket);
   printf("P3 TERMINATO\n");

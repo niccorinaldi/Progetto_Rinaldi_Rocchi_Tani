@@ -103,7 +103,7 @@ void main (int argc, char* argv[]) {
         snprintf(bufferInvio,6,"%d\n",result);/* Salvataggio del risultato in un buffer di invio */
         write(fdConnessioneSocket,bufferInvio,6);
         result = 0;
-       
+      
     }
     close (fdPipe);
     close (fdConnessioneSocket);

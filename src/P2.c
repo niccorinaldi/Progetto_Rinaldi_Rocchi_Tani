@@ -9,22 +9,24 @@
 #define I_AM_ALIVE SIGUSR2
 
 int InputManagerSocketConnection() {
-  int clientFd, serverLen, connection; //connection è la differenza tra lui e inputManager -> vedi
+  int serverFd, clientFd, serverLen, clientLen; //connection è la differenza tra lui e inputManager -> vedi
   struct sockaddr_un serverUNIXAddress;
   struct sockaddr* serverSockAddrPtr;
+  struct sockaddr_un clientUNIXAddress;
+  struct sockaddr* clientSockAddrPtr;
+  
   serverSockAddrPtr = (struct sockaddr*) &serverUNIXAddress; //VEDI BENE
   serverLen = sizeof (serverUNIXAddress); //Vedi bene anche questo (tutte queste 4 righe insomma)
-  clientFd = socket (AF_UNIX, SOCK_STREAM, 0); //righe 13 e 14 differenziazione con IM
+  clientSockAddrPtr = (struct sockaddr*) &clientUNIXAddress; //VEDI BENE
+  clientLen = sizeof (clientUNIXAddress);
+  
+  serverFd = socket (AF_UNIX, SOCK_STREAM, 0); //righe 13 e 14 differenziazione con IM
   serverUNIXAddress.sun_family = AF_UNIX; // dominio del server (client e server sono sulla stessa macchina -> rel.)
   strcpy (serverUNIXAddress.sun_path, "SocketP2"); //nome del server (Nel progetto di Fili è senza virgolette -> vedi)
   unlink("SocketP2");
-  do{ //ciclo finché non riesco a stabilire una connessione con il server
-      connection = connect (clientFd, serverSockAddrPtr, serverLen); //restituisce 0 in caso di successo, -1 altrimenti
-      if(connection == -1){
-          printf("InputManager ritenterà la connessione con P2 tra 1 sec\n");
-          sleep(1);
-      }
-  } while (connection == -1);
+  bind(serverFd, serverSockAddrPtr, serverLen);
+  listen(serverFd, 5);
+  clientFd=accept(serverFd, clientSockAddrPtr, &clientLen);
 
   return clientFd;
 }

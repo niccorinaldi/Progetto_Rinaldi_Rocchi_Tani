@@ -29,26 +29,24 @@ int connessionePipe(){
 //metodo per comunicare con P2 tramite socket
 int connessioneSocket() {
 
-  int socketFd, clientFd, serverLen, clientLen;
+  int clientFd, serverLen, result;
   struct sockaddr_un serverUNIXAddress;
-  struct sockaddr* clientSockAddrPtr;
   struct sockaddr* serverSockAddrPtr;
-  struct sockaddr_un clientUNIXAddress;
-
+  
   serverSockAddrPtr = (struct sockaddr*) &serverUNIXAddress; //VEDI BENE
   serverLen = sizeof (serverUNIXAddress); //Vedi bene anche questo (tutte queste 4 righe insomma)
-  clientSockAddrPtr = (struct sockaddr*) &clientUNIXAddress;
-  clientLen = sizeof (clientUNIXAddress);
-
-  socketFd = socket (AF_UNIX, SOCK_STREAM, 0); // istanzia la socket  //metti anche 0 invece di "DEFAULT_PROTOCOL"  //file descriptor (descrittore di file associato al nuovo socket creato)
+  
+  clientFd = socket (AF_UNIX, SOCK_STREAM, 0); // istanzia la socket  //metti anche 0 invece di "DEFAULT_PROTOCOL"  //file descriptor (descrittore di file associato al nuovo socket creato)
   serverUNIXAddress.sun_family = AF_UNIX; // dominio del server (client e server sono sulla stessa macchina -> rel.)
   strcpy (serverUNIXAddress.sun_path, "SocketP2");
-  unlink ("SocketP2"); //invochiamo un unlink() del nome "SocketP2" perché potrebbe già esistere un sockey avente lo stesso nome (causando errore)
-  bind(socketFd, serverSockAddrPtr, serverLen); // definisce il nome della socket //VEDI BENE
-  listen(socketFd, 1);  //ascolta la coda delle connessioni  //In questo modo gli dico che il numero massimo di richieste pendenti è 1
-
-  clientFd = accept(socketFd, clientSockAddrPtr, &clientLen); // gestisce la prossima connessione  //clientFd = nuovo descrittore di file
-  //sfd == Socket File Descriptor
+  do{
+  	result= connect(clientFd, serverSockAddrPtr, serverLen);
+ 		if(result==-1){
+  		printf("problema di connessione, riprovare tra 1 sec\n");
+  		sleep(1);
+  		}
+  }while(result==-1);
+  
   return clientFd;
 }
 
