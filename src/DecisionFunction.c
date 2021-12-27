@@ -95,4 +95,5 @@ void main(){
     close(clientFd1);
     close(clientFd2);
     close(serverFd);
+    unlink("DFsocket");
 }
