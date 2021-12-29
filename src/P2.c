@@ -1,155 +1,132 @@
 #include <stdio.h>
+#include <signal.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <time.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
-#include <signal.h>
-#include <sys/un.h> /* For AF_UNIX sockets */
-#include <unistd.h> //per usare read()
+#include <sys/un.h>
 #define I_AM_ALIVE SIGUSR2
 
-int InputManagerSocketConnection() {
-  int serverFd, clientFd, serverLen, clientLen; //connection è la differenza tra lui e inputManager -> vedi
+///////////////////////////////////////////////////////////////////
+////// Metodo per la ricezione da InputManager tramite socket ////
+/////////////////////////////////////////////////////////////////
+int inputManagerSocketConnection() {
+  int serverFd, clientFd, serverLen, clientLen;
   struct sockaddr_un serverUNIXAddress;
   struct sockaddr* serverSockAddrPtr;
   struct sockaddr_un clientUNIXAddress;
   struct sockaddr* clientSockAddrPtr;
-  
-  serverSockAddrPtr = (struct sockaddr*) &serverUNIXAddress; //VEDI BENE
-  serverLen = sizeof (serverUNIXAddress); //Vedi bene anche questo (tutte queste 4 righe insomma)
-  clientSockAddrPtr = (struct sockaddr*) &clientUNIXAddress; //VEDI BENE
-  clientLen = sizeof (clientUNIXAddress);
-  
-  serverFd = socket (AF_UNIX, SOCK_STREAM, 0); //righe 13 e 14 differenziazione con IM
-  serverUNIXAddress.sun_family = AF_UNIX; // dominio del server (client e server sono sulla stessa macchina -> rel.)
-  strcpy (serverUNIXAddress.sun_path, "SocketP2"); //nome del server (Nel progetto di Fili è senza virgolette -> vedi)
+  serverSockAddrPtr = (struct sockaddr*) &serverUNIXAddress;
+  serverLen = sizeof(serverUNIXAddress);
+  clientSockAddrPtr = (struct sockaddr*) &clientUNIXAddress;
+  clientLen = sizeof(clientUNIXAddress);
+  serverFd = socket(AF_UNIX, SOCK_STREAM, 0); /* Protocollo di default definito a 0 */
+  serverUNIXAddress.sun_family = AF_UNIX;
+  strcpy(serverUNIXAddress.sun_path, "SocketP2");
   unlink("SocketP2");
   bind(serverFd, serverSockAddrPtr, serverLen);
   listen(serverFd, 5);
-  clientFd=accept(serverFd, clientSockAddrPtr, &clientLen);
+  clientFd = accept(serverFd, clientSockAddrPtr, &clientLen);
 
   return clientFd;
 }
 
+///////////////////////////////////////////////////////////////////
+/// Metodo per la connessione a DecisionFunction tramite socket //
+/////////////////////////////////////////////////////////////////
+int decisionFunctionSocketConnection() {
+  int clientFd, serverLen, result;
+  struct sockaddr_un serverUNIXAddress;
+  struct sockaddr* serverSockAddrPtr;
+  serverSockAddrPtr = (struct sockaddr*) &serverUNIXAddress;
+  serverLen = sizeof(serverUNIXAddress);
+  clientFd = socket(AF_UNIX, SOCK_STREAM, 0); /* Protocollo di default definito a 0 */
+  serverUNIXAddress.sun_family = AF_UNIX;
+  strcpy(serverUNIXAddress.sun_path, "DFsocket");
+  do {
+      result = connect (clientFd, serverSockAddrPtr, serverLen);
+      if (result == -1) {
+        printf("Problema di connessione P2 -> DecisionFunction, riprovare tra 1 secondo\n");
+        sleep (1);
+      }
+  } while(result == -1);
 
-int DecisionFunctionSocketConnection()
-{
-    int clientFd, serverLen, connection;
-    struct sockaddr_un serverUNIXAddress;
-    struct sockaddr* serverSockAddrPtr;
-    serverSockAddrPtr = (struct sockaddr*) &serverUNIXAddress;
-    serverLen = sizeof (serverUNIXAddress);
-    clientFd = socket (AF_UNIX, SOCK_STREAM, 0);
-    serverUNIXAddress.sun_family = AF_UNIX;
-    strcpy (serverUNIXAddress.sun_path, "DFsocket");
-    do {
-        connection = connect (clientFd, serverSockAddrPtr, serverLen);
-        if (connection == -1) {
-            printf("DecisionFunction ritenterà la connessione con P2 tra 1 sec\n");
-            sleep (1);
-        }
-    }while (connection == -1);
-
-    return clientFd;
+  return clientFd;
 }
 
-/* Tratto da cook.c */
-int readLine (int fd, char *str) { //quindi scandisco tutti i caratteri, a questo punto devo trovare il modo di sommarli non tenendo in considerazione le virgole
-/* Read a single ’\0’-terminated line into str from fd */
-int n;
-do { /* Read characters until ’\0’ or end-of-input */
-  n = read (fd, str, 1); /* Read one character */
- } while (n > 0 && *str++ != '\0');
- return (n > 0);
-} /* Return false if end-of-input */
-
- int sum(char *str) {
-
-//mix
-int sumResult = 0; //vedi se puoi non inizializzarlo
-  for(int i = strlen(str); i>-2; i--){
-    if(str[i] != ',') {
-      sumResult += str[i];
-    }
-  }
-}
-
-//M
-int random_failure(int sumResult) {
-    srand(time(NULL)+20);  // Imposto un valore casuale al seed della funzione random utilizzando time
-
-    // Genero un numero casuale tra 0 e 9, se uguale a 7 modifico result
-    int rand = random()%10;
-    if(rand == 7)
-        sumResult += 20;
-    return sumResult;
-}
-
-//F
-/*int random_failure(int attivo) {
-    srand(time(NULL) + 4); // Imposto un valore casuale al seed della funzione random utilizzando time
-
-    // Se random failure è attivo e il numero generato tra 0 e 9 è uguale a 8, allora genera una failure
-    if(attivo && (rand()%10) == 8) {
-        return 20;
-    }
-    else return 0;
+/*int readLine (int fd, char *str) {
+  int n;
+  do {
+    n = read (fd, str, 1);
+  } while(n > 0 && *str++ != '\0');
+  return (n > 0);
 }*/
 
-//trova alternativa (ripercussione sul main)
-void sendToDecisionFunction(int clientDecisionFunction, int sum) {
-    int tmp;
-    tmp = htonl(sum); // Converte sum in network Byte Order
-    write(clientDecisionFunction, &tmp, sizeof(tmp));
+///////////////////////////////////////////////////////////////////
+//////// Metodo per l'incremento del risultato ottenuto //////////
+/////////////////////////////////////////////////////////////////
+int random_failure(int result) {
+  srand(time(NULL)+20);
+
+  int rand = random()%10;
+  if(rand == 5) /* Probabilità 10^-1 */
+      result += 20;
+  return result;
 }
 
-
+///////////////////////////////////////////////////////////////////
+////////////////////////// Main //////////////////////////////////
+/////////////////////////////////////////////////////////////////
 int main(int argc, char* argv[]) {
-  
-  /* Ignoro i segnali SIGUSR1 e I_AM_ALIVE */
+
   signal(SIGUSR1, SIG_IGN);
   signal(I_AM_ALIVE, SIG_IGN);
 
-  int clientFd;
-  int clientDecisionFunction;
   int numChar = atoi(argv[2]);
-  char str[numChar]; // 700 perchè le righe sono circa 550 caratteri e sennò va fuori memoria e crasha
-  int sumResult = 0;
- //   savePidOnFile("P2", getpid());
+  char buffer[numChar];
+  int fallimento = 0;
 
- char MODE[15];
- strcpy(MODE, argv[1]);
- int failure = 0;
- if(strcmp(MODE, "FALLIMENTO") == 0) {
-     failure = 1;
- }
-
- clientFd = InputManagerSocketConnection();
-  printf("P2 PRONTO\n");
-  int count = 0;
-  char bufferInvio[6];
-  int fdConnessioneSocket = DecisionFunctionSocketConnection();
-
-  while(readLine(clientFd, str)) { // Legge finché trova qualcosa da leggere
-    int sumResult = 0; //vedi se puoi non inizializzarlo
-    for(int i = strlen(str); i>-2; i--){
-    if(str[i] != ',') {
-      sumResult += str[i];
-    }
+  /* Verifico se la modalità inserita è FALLIMENTO */
+  char MODALITA[15];
+  strcpy(MODALITA, argv[1]);
+  if(strcmp(MODALITA, "FALLIMENTO") == 0) {
+    fallimento = 1;
   }
-    if(failure == 1){
-      sumResult = random_failure(sumResult);
+
+  /* Creazione di SocketP2 */
+  int clientFd = inputManagerSocketConnection();
+
+  printf("P2 PRONTO\n");
+
+  char bufferInvio[6];
+  int result = 0;
+
+  /* Connessione a DecisionFunction */
+  int fdConnessioneSocket = decisionFunctionSocketConnection();
+
+  while(1) {
+    read(clientFd, buffer, numChar);
+
+    for(int i = strlen(buffer); i>-2; i--) {
+      if(buffer[i] != ',') {
+        result += buffer[i];
+      }
     }
 
+    /* Modifica del risultato se avviato in modalità FALLIMENTO */
+    if(fallimento == 1)
+      result = random_failure(result);
 
-    snprintf(bufferInvio, 6, "%d\n", sumResult);
+    /* Invio del risultato a DecisionFunction */
+    snprintf(bufferInvio, 6, "%d\n", result);
     write(fdConnessioneSocket, bufferInvio, 6);
+    result = 0;
 
     sleep(1);
   }
-
-    close(clientFd);
-    close(fdConnessioneSocket);
-    printf("P2 TERMINATO\n");
-    return 0;
+  /* Chiusure */
+  close(clientFd);
+  close(fdConnessioneSocket);
+  return 0;
 }

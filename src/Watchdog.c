@@ -4,22 +4,22 @@
 #include <signal.h>
 #define I_AM_ALIVE SIGUSR2
 
-
 int flag = 0;
 
 int aliveControl(int sig) {
-    flag = 0;
+  flag = 0;
 }
 
+///////////////////////////////////////////////////////////////////
+////////////////////////// Main //////////////////////////////////
+/////////////////////////////////////////////////////////////////
 void main() {
-    signal(I_AM_ALIVE, aliveControl);
+  signal(I_AM_ALIVE, aliveControl);
 
-    while (1)
-    {
-        sleep(1);
-        if(flag == 2)
-            kill(0, SIGUSR1);
-        flag++;
-    }
+  while (1) {
+    sleep(1);
+    if(flag == 2)
+      kill(0, SIGUSR1);
+    flag++;
+  }
 }
-

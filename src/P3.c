@@ -9,109 +9,105 @@
 #include <sys/un.h>
 #define I_AM_ALIVE SIGUSR2
 
+///////////////////////////////////////////////////////////////////
+/// Metodo per la connessione a DecisionFunction tramite socket //
+/////////////////////////////////////////////////////////////////
 int connessioneSocket() {
-    int fdConnessioneSocket, serverLen, result;
-    struct sockaddr_un serverUNIXAddress;
-    struct sockaddr* serverSockAddrPtr;
-    serverSockAddrPtr = (struct sockaddr*) &serverUNIXAddress;
-    serverLen = sizeof (serverUNIXAddress);
-    fdConnessioneSocket = socket (AF_UNIX, SOCK_STREAM, 0);
-    serverUNIXAddress.sun_family = AF_UNIX; /*dominio server*/
-    strcpy (serverUNIXAddress.sun_path, "DFsocket"); /*nome server*/
+  int fdConnessioneSocket, serverLen, result;
+  struct sockaddr_un serverUNIXAddress;
+  struct sockaddr* serverSockAddrPtr;
+  serverSockAddrPtr = (struct sockaddr*) &serverUNIXAddress;
+  serverLen = sizeof(serverUNIXAddress);
+  fdConnessioneSocket = socket(AF_UNIX, SOCK_STREAM, 0); /* Protocollo di default definito a 0 */
+  serverUNIXAddress.sun_family = AF_UNIX;
+  strcpy (serverUNIXAddress.sun_path, "DFsocket");
 
-    do { /*itera finchè non viene stabilita la connessione*/
-        result = connect (fdConnessioneSocket, serverSockAddrPtr, serverLen);
-        if (result == -1) {
-	        printf("Problema di connessione P3, riprovare tra 1 secondo\n");
-	        sleep (1);
-        }
-    } while (result == -1);
-    return fdConnessioneSocket;
+  do {
+    result = connect(fdConnessioneSocket, serverSockAddrPtr, serverLen);
+    if(result == -1) {
+      printf("Problema di connessione P3 -> DecisionFunction, riprovare tra 1 secondo\n");
+	    sleep (1);
+    }
+  } while(result == -1);
+  return fdConnessioneSocket;
 }
 
+///////////////////////////////////////////////////////////////////
+//////// Metodo per l'incremento del risultato ottenuto //////////
+/////////////////////////////////////////////////////////////////
 int random_failure(int result) {
-    /*Imposto un valore casuale al seed della finzione random utilizzando time */
-    srand(time(NULL)+30);
+  srand(time(NULL)+30);
 
-    /* Genero un numero casuale tra 0 e 9, se uguale a 1 modifico result */
-    int rand = random()%10;
-    if(rand == 7)
-        result += 30;
-    return result;
+  int rand = random()%10;
+  if(rand == 5) /* Probabilità 10^-1 */
+    result += 30;
+  return result;
 }
 
+///////////////////////////////////////////////////////////////////
+////////////////////////// Main //////////////////////////////////
+/////////////////////////////////////////////////////////////////
 void main(int argc, char *argv[]){
 
-  /* Ignoro i segnali SIGUSR1 e I_AM_ALIVE */
   signal(SIGUSR1, SIG_IGN);
   signal(I_AM_ALIVE, SIG_IGN);
 
-  /* Definisco la lunghezza delle righe da leggere */
-  int numChar = atoi(argv[2]) - 1; //converte una stringa in intero
+  int numChar = atoi(argv[2]) - 1;
+  int fallimento = 0;
 
-  /*definisco la modalità di avvio*/
+  /* Verifico se la modalità inserita è FALLIMENTO */
   FILE *fp;
-  char MODE[15];
-  strcpy(MODE, argv[1]);
-  int failure=0;
-  if(strcmp(MODE, "FALLIMENTO") == 0) {
-      failure = 1;
+  char MODALITA[15];
+  strcpy(MODALITA, argv[1]);
+  if(strcmp(MODALITA, "FALLIMENTO") == 0) {
+    fallimento = 1;
   }
 
-  /* Creazione di due buffer che ospiteranno i dati ricevuti
-     da input manager, servono per poter capire quando
-     il file condiviso viene aggiornato */
-  char buffer[numChar], bufferPrecedente[numChar];
+  /* Creazione di due buffer per verificare quando
+  il file condiviso viene aggiornato */
+  char buffer[numChar];
+  char bufferPrecedente[numChar];
   int result = 0;
-
   fp = NULL;
-  while (fp == NULL){
-      fp = fopen("FileCondivisoP3.txt", "r");  /*Apertura del file condiviso*/
+  while(fp == NULL) {
+    fp = fopen("FileCondivisoP3.txt", "r");
   }
   printf("P3 PRONTO\n");
-  fread(buffer, 1, numChar, fp); //permette di leggere su un file un blocco di dati di qualsiasi tipo
-  printf("%s\n", buffer); // %s\n stampa la stringa buffer
+  fread(buffer, 1, numChar, fp);
+  printf("%s\n", buffer);
 
-  /* Copio buffer in bufferPrecedente in modo da capire se il file è stato aggionato successivamente */
   strcpy(bufferPrecedente, buffer);
 
-  /* Connessione a decisionFunction */
+  /* Connessione a DecisionFunction */
   int fdConnessioneSocket = connessioneSocket();
 
   /* Creazione del buffer di invio */
-  char bufferInvio[6]; //perchè 6
- 
+  char bufferInvio[6];
+
   while (1){
-  
-      /* Controllo che le stringhe siano diverse, altrimenti aspetto una modifica */
-      if (strcmp(buffer, bufferPrecedente) != 0)
-      {
-          for (int i = 0; i < numChar; i++)
-          {
-              if(buffer[i] != ',') {
-                  result += buffer[i];  //effettuo la somma
-              }
-          }
-
-          /* Modifica del risultato se avviato in modalità FALLIMENTO */
-          if(failure == 1)
-              result = random_failure(result);
-
-          /* Invio del risultato a decisionFunction */
-       
-          snprintf(bufferInvio,6,"%d\n",result); //formatta e memorizza una serie di caratteri e valori nel buffer dell'array
-          write(fdConnessioneSocket,bufferInvio,6);
-          result = 0;
-
-          /* Aggiorno bufferPrecedente con il nuovo buffer */
-          strcpy(bufferPrecedente, buffer);
-          
+    if(strcmp(buffer, bufferPrecedente) != 0) { /* Confronto le due stringhe */
+      for(int i = 0; i < numChar; i++) {
+        if(buffer[i] != ',') {
+          result += buffer[i];
+        }
       }
-      fclose(fp);
-      fp = fopen("FileCondivisoP3.txt", "r");
-      fread(buffer, 1, numChar, fp);
-  
+
+      /* Modifica del risultato se avviato in modalità FALLIMENTO */
+      if(fallimento == 1)
+        result = random_failure(result);
+
+      /* Invio del risultato a DecisionFunction */
+      snprintf(bufferInvio, 6, "%d\n", result);
+      write(fdConnessioneSocket, bufferInvio, 6);
+      result = 0;
+
+      /* Aggiorno bufferPrecedente con il nuovo buffer */
+      strcpy(bufferPrecedente, buffer);
+    }
+    fclose(fp);
+    fp = fopen("FileCondivisoP3.txt", "r");
+    fread(buffer, 1, numChar, fp);
   }
+  /* Chiusure */
   close(fdConnessioneSocket);
-  printf("P3 TERMINATO\n");
 }
