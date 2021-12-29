@@ -68,7 +68,7 @@ void main (int argc, char* argv[]) {
       fallimento = 1;
   }
 
-  /* Rimuozione della pipe se già esistente */
+  /* Rimozione della pipe se già esistente */
   unlink("PipeP1");
 
   /* Creazione della pipe */
