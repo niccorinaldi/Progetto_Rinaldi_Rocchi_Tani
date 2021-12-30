@@ -6,7 +6,7 @@
 
 int flag = 0;
 
-int aliveControl(int sig) {
+void aliveControl(int sig) {
   flag = 0;
 }
 
