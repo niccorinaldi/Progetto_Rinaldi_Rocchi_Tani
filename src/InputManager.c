@@ -143,7 +143,7 @@ int main(int argc, char *argv[]){
   char MODALITA[15];
   strcpy(MODALITA, argv[1]);
   if(strcmp(MODALITA,"NORMALE") == 0 || strcmp(MODALITA,"FALLIMENTO") == 0) {
-    printf("MODALITA': %s\n", MODALITA);
+    printf("MODALITÀ: %s\n", MODALITA);
   } else {
     printf("Inserire una modalità valida: FALLIMENTO o NORMALE\n");
     kill(0,SIGKILL);
