@@ -2,7 +2,7 @@
 
 Per avviare il programma è necessario eseguire i seguenti comandi su shell:
 
-cc Avvia.c -o avvia
+cc avvia.c -o avvia
 ./avvia [MOD_AVVIO] [PATH_DATASET]
 
 [MOD_AVVIO] deve essere sostituito con: "NORMALE" oppure "FALLIMENTO"
