@@ -1,3 +1,12 @@
+/*
+AUTORI DEL PROGETTO:
+Niccolò Rinaldi
+Ilaria Rocchi
+Chiara Tani
+MODULO DI LABORATORIO DI SISTEMI OPERATIVI AA. 2020/2021
+*/
+
+
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
