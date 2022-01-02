@@ -14,11 +14,11 @@ int main(int argc, char* argv[]){
     kill(0,SIGKILL);
   }
   system("make clean");
+  system("make install");
   system("make");
   usleep(50000);
-  system("make install");
   usleep(50000);
   printf("Compilazione terminata!\n\n");
-  printf("----------------------------\n AVVIO\n ----------------------------");
+  printf("----------------------------\n");
   execl("bin/InputManager",argv[0],argv[1], argv[2], NULL);
 }
