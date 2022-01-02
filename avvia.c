@@ -13,9 +13,11 @@ int main(int argc, char* argv[]){
     printf("Inserire tutti gli argomenti necessari\n");
     kill(0,SIGKILL);
   }
-  mkdir("bin",0777);
-  mkdir("log",0777);
-  system("cc src/InputManager.c -o bin/InputManager && cc src/P1.c -o bin/P1 && cc src/P2.c -o bin/P2 && cc src/P3.c -o bin/P3 && cc src/DecisionFunction.c -o bin/DecisionFunction && cc src/FailureManager.c -o bin/FailureManager && cc src/Watchdog.c -o bin/Watchdog");
+  system("make clean");
+  system("make");
+  usleep(50000);
+  system("make install");
+  usleep(50000);
   printf("Compilazione terminata!\n");
   execl("bin/InputManager",argv[0],argv[1], argv[2], NULL);
 }
