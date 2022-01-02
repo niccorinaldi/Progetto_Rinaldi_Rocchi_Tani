@@ -25,7 +25,7 @@ install:
 	mkdir ./log
 	mkdir ./bin
 	find . -maxdepth 1 -type f ! -name "*.*" -exec mv -t ./bin/ {} \+
-	mv ./bin/makefile ./ 
+#	mv ./bin/makefile ./ 
 
 clean:
 	rm -r log
