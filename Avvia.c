@@ -25,8 +25,6 @@ int main(int argc, char* argv[]){
   system("make clean");
   system("make install");
   system("make");
-  usleep(50000);
-  usleep(50000);
   printf("Compilazione terminata!\n\n");
   printf("----------------------------\n");
   execl("bin/InputManager",argv[0],argv[1], argv[2], NULL);
