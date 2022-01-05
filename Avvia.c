@@ -23,9 +23,9 @@ int main(int argc, char* argv[]){
     kill(0,SIGKILL);
   }
   system("make clean");
-  system("make install");
   system("make");
-  printf("Compilazione terminata!\n\n");
+  system("make install");
+  printf("\n\nCompilazione terminata!\n\n");
   printf("----------------------------\n");
   execl("bin/InputManager",argv[0],argv[1], argv[2], NULL);
 }
