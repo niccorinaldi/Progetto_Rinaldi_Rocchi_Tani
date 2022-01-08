@@ -72,7 +72,7 @@ int fileCondiviso() {
 void creaFork(char MODALITA[15], char numChar[4]) {
   int pid;
 
-  pid = fork();    /*creazione di DecisionFunction*/
+  pid = fork();    /*Creazione di DecisionFunction*/
   if(pid < 0) {
     fprintf(stderr, "Fork fallita\n");
     exit(-1);
