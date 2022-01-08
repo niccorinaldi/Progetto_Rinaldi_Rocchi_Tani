@@ -28,7 +28,5 @@ install:
 	mv ./bin/Makefile ./ 
 
 clean:
-	rm -r log
-	rm -r bin
-
-#DECIDERE SE METTERE OPPURE NO LE @
+	@rm -r log # Inseriamo le @ per non far visualizzare l'errore in caso le cartelle bin e log non esistessero, come nel caso della prima esecuzione
+	@rm -r bin
